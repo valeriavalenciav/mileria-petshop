@@ -11,27 +11,6 @@ $~$
 
 $~$
 
-## DISCLAIMER ⚠️
-
-The Starter Templates experience is currently only available to new users.
-
-To benefit from this experience, please follow this link to create a new
-account and select the template to install: [https://www.contentful.com/starter-templates/ecommerce-website/sign-up/?action=create_starter_template](https://www.contentful.com/starter-templates/ecommerce-website/sign-up/?action=create_starter_template&utm_source=github.com&utm_medium=referral&utm_campaign=template-ecommerce-webapp-nextjs).
-
-Alternatively, to immediately start the auto installation of this template after creating a new account, please follow this link:
-[https://www.contentful.com/starter-templates/ecommerce-website/sign-up/?action=create_starter_template&template_name=ecommerce](https://www.contentful.com/starter-templates/ecommerce-website/sign-up/?action=create_starter_template&template_name=ecommerce&utm_source=github.com&utm_medium=referral&utm_campaign=template-ecommerce-webapp-nextjs).
-
-$~$
-
-## Begin your journey with Contentful and the Ecommerce Starter Template
-
-Follow this [guide](https://github.com/contentful/template-ecommerce-webapp-nextjs/blob/main/docs/tutorials/contentful-and-the-starter-template.md/?utm_source=github.com-guide&utm_medium=referral&utm_campaign=template-ecommerce-webapp-nextjs) to understand the relationship between
-Contentful and the Starter Template source code through guided steps:
-
-- Entry editing, and updates preview in the Starter Template application (online/locally)
-- Content type editing in the Contentful web app, as well as in the Starter Template's code
-
-$~$
 
 ## Features
 
