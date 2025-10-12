@@ -22,12 +22,6 @@ export const Header = (props: BoxProps) => {
       {...props}>
       <Link href="/" title={t('common.homepage')}>
         <HStack spacing="3">
-          <Box
-            as={MileriaLogo}
-            title={t('common.logoImageAltText')}
-            height="40px"
-            width="auto"
-          />
           <Text fontSize="xl" fontWeight="bold">
             Mileria PetShop
           </Text>
