@@ -4,7 +4,7 @@ import { useRouter } from 'next/router';
 interface FormatCurrencyProps {
   value: number;
   locale?: string;
-  style?: string;
+  style?: 'currency' | 'unit' | 'decimal' | 'percent';
   currency?: string;
 }
 
