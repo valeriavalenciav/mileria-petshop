@@ -1,4 +1,4 @@
-import { Box, BoxProps, Flex } from '@chakra-ui/react';
+import { Box, BoxProps, Flex, HStack, Text } from '@chakra-ui/react';
 import { useTranslation } from 'next-i18next';
 import Link from 'next/link';
 
@@ -21,11 +21,17 @@ export const Header = (props: BoxProps) => {
       zIndex="2"
       {...props}>
       <Link href="/" title={t('common.homepage')}>
-        <Box
-          display={{ base: 'none', md: 'block', lg: 'block' }}
-          as={MileriaLogo}
-          title={t('common.logoImageAltText')}
-        />
+        <HStack spacing="3">
+          <Box
+            as={MileriaLogo}
+            title={t('common.logoImageAltText')}
+            height="40px"
+            width="auto"
+          />
+          <Text fontSize="xl" fontWeight="bold">
+            Mileria PetShop
+          </Text>
+        </HStack>
       </Link>
       <LanguageSelector />
     </Flex>
