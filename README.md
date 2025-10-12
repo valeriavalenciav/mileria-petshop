@@ -200,31 +200,7 @@ For custom components, you can find the instructions at our [guide](https://www.
 
 $~$
 
----
 
-$~$
-
-## Support
-
-If you have a problem with this Starter Template, post a message in our [Contentful Community Slack](https://www.contentful.com/slack/).
-
-Can't find your answer there? You can file a feedback issue through [this template](https://github.com/contentful/template-ecommerce-webapp-nextjs/tree/main/.github/ISSUE_TEMPLATE/feedback.md).
-
-If you have other problems with Contentful not related to the Starter Template, you can contact the [Customer Support](https://support.contentful.com/).
-
-$~$
-
-## Contributing
-
-See [CONTRIBUTING.md](./CONTRIBUTING.md).
-
-$~$
-
-## License
-
-MIT License, see [LICENSE](./LICENSE).
-
-$~$
 
 <!-- FOOTNOTES -->
 
