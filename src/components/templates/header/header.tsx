@@ -3,7 +3,6 @@ import { useTranslation } from 'next-i18next';
 import Link from 'next/link';
 
 import MileriaLogo from '@icons/mileria.svg';
-import { LanguageSelector } from '@src/components/features/language-selector';
 
 export const HEADER_HEIGHT = 60;
 
@@ -27,7 +26,6 @@ export const Header = (props: BoxProps) => {
           </Text>
         </HStack>
       </Link>
-      <LanguageSelector />
     </Flex>
   );
 };
