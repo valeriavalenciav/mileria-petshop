@@ -1,7 +1,7 @@
 import { Container, Heading, Text } from '@chakra-ui/react';
 import { NextPage } from 'next';
 import { useTranslation } from 'next-i18next';
-import { serverSideTranslations } from '../utils/get-serverside-translations';
+import { getServerSideTranslations } from './utils/get-serverside-translations';
 
 const TermsAndConditions: NextPage = () => {
   const { t } = useTranslation();
@@ -19,7 +19,7 @@ const TermsAndConditions: NextPage = () => {
 export const getStaticProps = async ({ locale }: { locale: string }) => {
   return {
     props: {
-      ...(await serverSideTranslations(locale, ['common'])),
+      ...(await getServerSideTranslations(locale)),
     },
   };
 };
