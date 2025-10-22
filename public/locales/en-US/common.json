@@ -17,5 +17,23 @@
   "notFound": {
     "title": "Page not found",
     "description": "This page doesn't seem to exist. <0>Click here</0> to go back the homepage."
+  },
+  "footer": {
+    "privacyPolicy": "Privacy Policy",
+    "accessibilityStatement": "Accessibility Statement",
+    "termsAndConditions": "Terms and Conditions",
+    "copyright": "© 2023 My Pet Store"
+  },
+  "privacyPolicy": {
+    "title": "Privacy Policy",
+    "description": "This is a brief description of the privacy policy."
+  },
+  "accessibilityStatement": {
+    "title": "Accessibility Statement",
+    "description": "This is a brief description of the accessibility statement."
+  },
+  "termsAndConditions": {
+    "title": "Terms and Conditions",
+    "description": "This is a brief description of the terms and conditions."
   }
 }

@@ -1,5 +1,6 @@
-import { Container, Box, Text, Link, useTheme } from '@chakra-ui/react';
+import { Container, Box, Text, Link, useTheme, Flex } from '@chakra-ui/react';
 import { useTranslation } from 'next-i18next';
+import NextLink from 'next/link';
 
 export const Footer = () => {
   const { t } = useTranslation();
@@ -17,6 +18,20 @@ export const Footer = () => {
         <Text mb={8}>{t('common.aboutUs')}</Text>
         <Text>{t('common.description1')}</Text>
         <Text mb={8}>{t('common.description2')}</Text>
+        <Flex mt={8} direction={{ base: 'column', md: 'row' }} justify="space-between" align="center">
+          <Flex>
+            <NextLink href="/privacy-policy" passHref>
+              <Link mr={4}>{t('footer.privacyPolicy')}</Link>
+            </NextLink>
+            <NextLink href="/accessibility-statement" passHref>
+              <Link mr={4}>{t('footer.accessibilityStatement')}</Link>
+            </NextLink>
+            <NextLink href="/terms-and-conditions" passHref>
+              <Link>{t('footer.termsAndConditions')}</Link>
+            </NextLink>
+          </Flex>
+          <Text mt={{ base: 4, md: 0 }}>{t('footer.copyright')}</Text>
+        </Flex>
       </Container>
     </Box>
   );
