@@ -12,6 +12,20 @@ const AccessibilityStatement: NextPage = () => {
         {t('accessibilityStatement.title')}
       </Heading>
       <Text>{t('accessibilityStatement.description')}</Text>
+      <Heading as="h2" size="lg" my={4}>
+        {t('accessibilityStatement.title2')}
+      </Heading>
+      <Text>{t('accessibilityStatement.description2')}</Text>
+      <ul>
+        <li>{t('accessibilityStatement.ul1')}</li>
+        <li>{t('accessibilityStatement.ul2')}</li>
+        <li>{t('accessibilityStatement.ul3')}</li>
+        <li>{t('accessibilityStatement.ul4')}</li>
+      </ul>
+      <Heading as="h2" size="lg" my={4}>
+        {t('accessibilityStatement.title3')}
+      </Heading>
+      <Text>{t('accessibilityStatement.description3')}</Text>
     </Container>
   );
 };
