@@ -22,18 +22,53 @@
     "privacyPolicy": "Privacy Policy",
     "accessibilityStatement": "Accessibility Statement",
     "termsAndConditions": "Terms and Conditions",
-    "copyright": "© 2023 My Pet Store"
+    "copyright": "© 2025 Mileria Pet Shop - All rights reserved"
   },
   "privacyPolicy": {
     "title": "Privacy Policy",
-    "description": "This is a brief description of the privacy policy."
+    "description": "At Milenaria Pet Shop, we know that trust is the foundation of a strong community. We care about the health and well-being of our dogs with all our organic and eco-friendly products, so we manage personal data carefully, responsibly, and transparently. Your privacy is important to children, as they are their favorite toys.",
+    "title2": "Information collected and why",
+    "description2": "We only collect the information necessary to provide you with the best possible service, always with your consent. This includes:",
+    "ol1": "Order and Contact Information: Name, shipping address, email, and phone number. Purpose: To process your purchase, ensure the delivery of your organic products, and send you updates about your order.",
+    "ol2": "Payment Information: Processed securely by certified payment platforms (we never store your full card information). Purpose: To facilitate the transaction of your items safely and efficiently.",
+    "ol3": "Pet Preferences: Pet type, breed, allergies, or dietary preferences (if provided). Purpose: To personalize your experience, recommend the most suitable organic products, and send you relevant content (if you subscribe).",
+    "title3": "Use and Disclosure",
+    "ul1":"We do not sell or rent your personal information to third parties.",
+    "ul2":"We only share essential information with trusted partners who help us operate, such as logistics companies for shipping your eco-friendly package and payment service providers.",
+    "ul3":"We implement strong security and encryption measures to protect your data from unauthorized access.",
+    "title4": "Your Rights",
+    "description3":"You have the right to access, correct, or delete your data at any time. We want you to have full control over your information, just as you choose the best products for your pet."
   },
   "accessibilityStatement": {
     "title": "Accessibility Statement",
-    "description": "This is a brief description of the accessibility statement."
+    "description": "At Milenaria Pet Shop, we firmly believe that the passion for organic products and animal welfare should have no barriers. We strive to maintain a usable and accessible website for as many people as possible, regardless of their abilities or the technology they use. Accessibility is a core value that reflects our commitment to a more inclusive and fair world.",
+    "title2": "Measures Implemented",
+    "description2": "We have made efforts to ensure that our website complies with the Web Content Accessibility Guidelines and will continue to monitor and improve this accessibility. Some of these measures include:",
+    "ol1": "Perceptible Content: All relevant images of our organic and eco-friendly products have descriptive alt text for screen reader users.",
+    "ol2": "Ease of Operation: The site is fully navigable with a keyboard, without the need for a mouse. This is essential for many users.",
+    "ol3": "Understandability: We use clear and simple language in product descriptions and throughout the site. Purchase forms are designed to be intuitive.",
+    "ol4": "Responsive and Adaptive Design: Our design is responsive, meaning the store looks and works well on any device (mobile, tablet, computer).",
+    "title3": "Feedback and Contact:",
+    "description3": "If you encounter any obstacles or have suggestions for improving the accessibility of our site, please contact us. Your feedback helps us improve and ensure our products are easily accessible to everyone."    
   },
   "termsAndConditions": {
     "title": "Terms and Conditions",
-    "description": "This is a brief description of the terms and conditions."
+    "description": "These Terms and Conditions govern the use of our website and the purchase of all organic and eco-friendly pet supplies. By placing an order, you agree to these terms, which constitute the legal basis of our business relationship and reflect our commitment to transparency and fair trade.",
+    "title2": "Product Availability",
+    "ol1": "All of our products are described as accurately as possible, highlighting their organic certifications, natural ingredients, and ecological benefits.",
+    "ol2": "Product availability is subject to availability. We strive to keep inventory up-to-date, but if an item runs out of stock after purchase, we will notify you immediately and offer a similar replacement or a full refund.",
+    "title3": "Fair Prices for the Planet and Pets",
+    "ol3": "Prices are in Colombian pesos and include applicable taxes. Shipping costs are indicated separately during the checkout process.",
+    "ol4": "We accept all major payment methods. Transactions are processed by trusted third parties to ensure security.",
+    "ol5": "The use of discount codes or promotions for eco-friendly purchases is subject to the specific conditions of the offer.",
+    "title4": "Shipping, Delivery, and Sustainable Packaging",
+    "ol6": "We strive to ship all orders using recycled or compostable packaging to reduce our environmental impact.",
+    "ol7": "Delivery times are estimates and vary by location. We are not responsible for delays caused by the carrier, but we will work together to resolve any issues.",
+    "title5": "Returns and Exchanges",
+    "ol8": "If the product arrives damaged or does not meet the promised organic quality standard, we accept returns within 5 days of receipt, provided the product is unused and in its original packaging.",
+    "ol9": "Exception: For pet hygiene and health reasons, perishable items, opened food, or personal care products with broken seals are generally not eligible for return, unless there is a manufacturing defect.",
+    "title6": "Applicable Law",
+    "description2": "These terms shall be governed by and construed in accordance with the laws of Colombia."
+
   }
 }

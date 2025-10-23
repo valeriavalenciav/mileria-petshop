@@ -12,6 +12,28 @@ const PrivacyPolicy: NextPage = () => {
         {t('privacyPolicy.title')}
       </Heading>
       <Text>{t('privacyPolicy.description')}</Text>
+      <Heading as="h2" size="lg" my={4}>
+      {t('privacyPolicy.title2')}
+      </Heading>
+      <Text>{t('privacyPolicy.description2')}</Text>
+      <ol>
+        <li>{t('privacyPolicy.ol1')}</li>
+        <li>{t('privacyPolicy.ol2')}</li>
+        <li>{t('privacyPolicy.ol3')}</li>
+      </ol>
+      <Heading as="h2" size="lg" my={4}>
+      {t('privacyPolicy.title3')}
+      </Heading>
+      <ul>
+        <li>{t('privacyPolicy.ul1')}</li>
+        <li>{t('privacyPolicy.ul2')}</li>
+        <li>{t('privacyPolicy.ul3')}</li>
+      </ul>
+      <Heading as="h2" size="lg" my={4}>
+      {t('privacyPolicy.title4')}
+      </Heading>
+      <Text>{t('privacyPolicy.description3')}</Text>
+
     </Container>
   );
 };
