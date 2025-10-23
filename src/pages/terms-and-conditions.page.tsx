@@ -12,14 +12,14 @@ const TermsAndConditions: NextPage = () => {
         {t('termsAndConditions.title')}
       </Heading>
       <Text>{t('termsAndConditions.description')}</Text>
-      <Heading as="h2" size="xl" my={8}>
+      <Heading as="h2" size="lg" my={4}>
         {t('termsAndConditions.title2')}
       </Heading>
       <ul>
         <li>{t('termsAndConditions.ul1')}</li>
         <li>{t('termsAndConditions.ul2')}</li>
       </ul>
-      <Heading as="h2" size="xl" my={8}>
+      <Heading as="h2" size="lg" my={4}>
         {t('termsAndConditions.title3')}
       </Heading>
       <ul>
@@ -27,21 +27,21 @@ const TermsAndConditions: NextPage = () => {
         <li>{t('termsAndConditions.ul4')}</li>
         <li>{t('termsAndConditions.ul5')}</li>
       </ul>
-      <Heading as="h2" size="xl" my={8}>
+      <Heading as="h2" size="lg" my={4}>
         {t('termsAndConditions.title4')}
       </Heading>
       <ul>
         <li>{t('termsAndConditions.ul6')}</li>
         <li>{t('termsAndConditions.ul7')}</li>
       </ul>
-      <Heading as="h2" size="xl" my={8}>
+      <Heading as="h2" size="lg" my={4}>
         {t('termsAndConditions.title5')}
       </Heading>
       <ul>
         <li>{t('termsAndConditions.ol8')}</li>
         <li>{t('termsAndConditions.ol9')}</li>
       </ul>
-      <Heading as="h2" size="xl" my={8}>
+      <Heading as="h2" size="lg" my={4}>
         {t('termsAndConditions.title6')}
       </Heading>
       <Text>{t('termsAndConditions.description2')}</Text>
