@@ -1,6 +1,7 @@
 import { Container, Box, Text, Link, useTheme, Flex } from '@chakra-ui/react';
 import { useTranslation } from 'next-i18next';
 import NextLink from 'next/link';
+import { SocialMedia } from '@src/components/shared/social-media';
 
 export const Footer = () => {
   const { t } = useTranslation();
@@ -13,10 +14,13 @@ export const Footer = () => {
       py={{ base: 10, lg: 16 }}
       mt="auto"
       borderTop="1px"
-      bg="#B4D4B6"
+      bg="footerBg"
       borderColor={theme.f36.gray200}>
       <Container>
-        <Text mb={8}>{t('common.aboutUs')}</Text>
+        <Flex justify="space-between" align="center" mb={8}>
+        <Text>{t('common.aboutUs')}</Text>
+        <SocialMedia />
+        </Flex>
         <Text>{t('common.description1')}</Text>
         <Text mb={8}>{t('common.description2')}</Text>
         <Flex mt={8} direction={{ base: 'column', md: 'row' }} justify="space-between" align="center">
