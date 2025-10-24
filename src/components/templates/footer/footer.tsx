@@ -13,6 +13,7 @@ export const Footer = () => {
       py={{ base: 10, lg: 16 }}
       mt="auto"
       borderTop="1px"
+      bg="#B4D4B6"
       borderColor={theme.f36.gray200}>
       <Container>
         <Text mb={8}>{t('common.aboutUs')}</Text>
