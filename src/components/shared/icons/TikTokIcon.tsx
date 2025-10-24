@@ -2,7 +2,7 @@ import { createIcon } from '@chakra-ui/react';
 
 export const TikTokIcon = createIcon({
   displayName: 'TikTokIcon',
-  viewBox: '0 0 24 24',
+  viewBox: '0 0 32 32',
   path: (
     <>
       <path
