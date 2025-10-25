@@ -28,7 +28,7 @@ export const Header = (props: BoxProps) => {
       </Link>
       <Link href="/subscription" title={t('common.subscription')}>
         <Text fontSize="xl" fontWeight="bold">
-        Subscripciones
+        Subscriptions
         </Text>
       </Link>
     </Flex>
