@@ -22,9 +22,14 @@ export const Header = (props: BoxProps) => {
       <Link href="/" title={t('common.homepage')}>
         <HStack spacing="3">
           <Text fontSize="xl" fontWeight="bold">
-            Mileria PetShop
+          {t('common.homepage')}
           </Text>
         </HStack>
+      </Link>
+      <Link href="/subscription" title={t('common.subscription')}>
+        <Text fontSize="xl" fontWeight="bold">
+        {t('common.subscription')}
+        </Text>
       </Link>
     </Flex>
   );
