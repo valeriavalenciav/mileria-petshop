@@ -1,20 +1,29 @@
-import { Box, Heading, Text } from '@chakra-ui/react';
+import { Container, Heading, Text } from '@chakra-ui/react';
 import { NextPage } from 'next';
 import { useTranslation } from 'next-i18next';
+import { getServerSideTranslations } from './utils/get-serverside-translations';
 
 const SubscriptionPage: NextPage = () => {
   const { t } = useTranslation();
 
   return (
-    <Box p={{ base: 4, md: 12, lg: 12 }}>
+    <Container>
       <Heading as="h1" size="xl" mb={4}>
-        Subscription to organic and artisanal pet products
+        {t('subscription.title')}
       </Heading>
       <Text>
-        We offer a subscription service for organic and artisanal pet products. You will receive a monthly box with a selection of our best products.
-      </Text>
-    </Box>
+        {t('subscription.description')}
+        </Text>
+    </Container>
   );
+};
+
+export const getStaticProps = async ({ locale }: { locale: string }) => {
+  return {
+    props: {
+      ...(await getServerSideTranslations(locale)),
+    },
+  };
 };
 
 export default SubscriptionPage;
