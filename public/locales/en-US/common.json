@@ -10,8 +10,61 @@
     "language": "Language"
   },
   "subscription":{
-    "title":"Subscription to get green pet products",
-    "description":"We offer a subscription service for organic and artisanal pet products. You will receive a monthly box with a selection of our best products."
+    "title": "Subscription to get green pet products",
+    "description": "We offer a subscription service for organic and artisanal pet products. You will receive a monthly box with a selection of our best products.",
+    "mostPopular": "Most popular",
+    "plans": [
+      {
+        "title": "Basic",
+        "resolution": "720p",
+        "price": "COP 18,900",
+        "monthlyPrice": "Monthly price",
+        "audioAndVideoQuality": "Audio and video quality",
+        "audioAndVideoQualityValue": "Good",
+        "resolutionTitle": "Resolution",
+        "resolutionValue": "720p (HD)",
+        "supportedDevices": "Supported devices",
+        "supportedDevicesValue": "TV, computer, cell phone, tablet",
+        "devicesAtHome": "Devices at home where you can watch Netflix at the same time",
+        "devicesAtHomeValue": "1",
+        "downloadDevices": "Download devices",
+        "downloadDevicesValue": "1"
+      },
+      {
+        "title": "Standard",
+        "resolution": "1080p",
+        "price": "COP 29,900",
+        "monthlyPrice": "Monthly price",
+        "audioAndVideoQuality": "Audio and video quality",
+        "audioAndVideoQualityValue": "Excellent",
+        "resolutionTitle": "Resolution",
+        "resolutionValue": "1080p (Full HD)",
+        "supportedDevices": "Supported devices",
+        "supportedDevicesValue": "TV, computer, cell phone, tablet",
+        "devicesAtHome": "Devices at home where you can watch Netflix at the same time",
+        "devicesAtHomeValue": "2",
+        "downloadDevices": "Download devices",
+        "downloadDevicesValue": "2"
+      },
+      {
+        "title": "Premium",
+        "resolution": "4K + HDR",
+        "price": "COP 44,900",
+        "monthlyPrice": "Monthly price",
+        "audioAndVideoQuality": "Audio and video quality",
+        "audioAndVideoQualityValue": "Optimal",
+        "resolutionTitle": "Resolution",
+        "resolutionValue": "4K (Ultra HD) + HDR",
+        "spatialAudio": "Spatial audio (immersive sound)",
+        "spatialAudioValue": "Included",
+        "supportedDevices": "Supported devices",
+        "supportedDevicesValue": "TV, computer, cell phone, tablet",
+        "devicesAtHome": "Devices at home where you can watch Netflix at the same time",
+        "devicesAtHomeValue": "4",
+        "downloadDevices": "Download devices",
+        "downloadDevicesValue": "6"
+      }
+    ]
   },
   "product": {
     "trendingProducts": "Trending now",
@@ -74,6 +127,5 @@
     "ul9": "Exception: For pet hygiene and health reasons, perishable items, opened food, or personal care products with broken seals are generally not eligible for return, unless there is a manufacturing defect.",
     "title6": "Applicable Law",
     "description2": "These terms shall be governed by and construed in accordance with the laws of Colombia."
-
   }
 }
