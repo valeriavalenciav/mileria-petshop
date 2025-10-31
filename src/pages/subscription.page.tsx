@@ -2,10 +2,12 @@ import { Box, Container, Heading, Text, Flex, VStack, HStack, Divider } from '@c
 import { NextPage } from 'next';
 import { useTranslation } from 'next-i18next';
 import { getServerSideTranslations } from './utils/get-serverside-translations';
+import { useState } from 'react';
 
 const SubscriptionPage: NextPage = () => {
   const { t } = useTranslation();
   const plans = t('subscription.plans', { returnObjects: true }) as any[];
+  const [selectedPlan, setSelectedPlan] = useState('Premium');
 
   return (
     <Container maxW="container.xl" py={10}>
@@ -20,9 +22,18 @@ const SubscriptionPage: NextPage = () => {
           <Box
             key={plan.title}
             className="subscription-card"
-            borderColor={index === 2 ? 'red.500' : 'gray.200'}
+            borderColor={selectedPlan === plan.title ? 'purple.500' : 'gray.200'}
+            borderWidth={selectedPlan === plan.title ? '2px' : '1px'}
+            transform={selectedPlan === plan.title ? 'scale(1.05)' : 'none'}
+            transition="transform 0.2s, border-color 0.2s, box-shadow 0.2s"
+            _hover={{
+              transform: 'scale(1.05)',
+              boxShadow: 'lg',
+            }}
+            onClick={() => setSelectedPlan(plan.title)}
+            cursor="pointer"
           >
-            {index === 2 && (
+            {plan.title === 'Premium' && (
               <Box className="most-popular-banner">
                 {t('subscription.mostPopular')}
               </Box>
