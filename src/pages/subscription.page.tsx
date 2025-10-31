@@ -22,7 +22,7 @@ const SubscriptionPage: NextPage = () => {
           <Box
             key={plan.title}
             className="subscription-card"
-            borderColor={selectedPlan === plan.title ? 'purple.500' : 'gray.200'}
+            borderColor={selectedPlan === plan.title ? '#02AB08' : 'gray.200'}
             borderWidth={selectedPlan === plan.title ? '2px' : '1px'}
             transform={selectedPlan === plan.title ? 'scale(1.05)' : 'none'}
             transition="transform 0.2s, border-color 0.2s, box-shadow 0.2s"
