@@ -10,7 +10,7 @@ const SubscriptionPage: NextPage = () => {
   const [selectedPlan, setSelectedPlan] = useState('Premium');
 
   return (
-    <Container maxW="container.xl" py={10} bg="subscriptionBg">
+    <Container maxW="container.xl" py={10}>
       <Heading as="h1" size="xl" mb={4} textAlign="center">
         {t('subscription.title')}
       </Heading>

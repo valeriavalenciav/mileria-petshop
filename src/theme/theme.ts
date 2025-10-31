@@ -9,7 +9,6 @@ export const theme = extendTheme({
   f36: tokens,
   colors: {
     footerBg: '#F7FFFA',
-    subscriptionBg: '#DAFFD6',
   },
   components: {
     Container: container,
