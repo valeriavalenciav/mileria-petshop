@@ -47,7 +47,8 @@ export const globalStyle: SystemStyleObject = {
     color: 'white',
   },
   '.subscription-card-header-basic': {
-    bgGradient: 'linear(to-r, blue.500, purple.500)',
+    background: '#30bd06',
+    bgGradient: 'linear(to-r, rgba(48, 189, 6, 1) 0%, rgba(96, 166, 43, 1) 35%, rgba(255, 229, 0, 1) 100%)',
   },
   '.subscription-card-header-standard': {
     bgGradient: 'linear(to-r, purple.600, blue.500)',
