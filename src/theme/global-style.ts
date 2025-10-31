@@ -55,6 +55,7 @@ export const globalStyle: SystemStyleObject = {
     bgGradient: 'linear(268deg, rgba(48, 189, 6, 1) 0%, rgba(96, 166, 43, 1) 35%, rgba(255, 229, 0, 1) 100%)',
   },
   '.subscription-card-header-premium': {
-    bgGradient: 'linear(to-r, red.400, purple.500)',
+    background: '#2A7B9B',
+    bgGradient: 'linear-gradient(90deg, rgba(42, 123, 155, 1) 0%, rgba(78, 204, 130, 1) 50%, rgba(252, 227, 0, 1) 100%)',
   },
 };
