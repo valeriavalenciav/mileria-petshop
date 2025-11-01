@@ -19,11 +19,11 @@
         "resolution": "Happy Puppy",
         "price": "COP 99,000",
         "monthlyPrice": "Monthly price",
-        "audioAndVideoQuality": "Product box",
+        "audioAndVideoQuality": "Gift Box",
         "audioAndVideoQualityValue": "2.5 kg ration of natural food. Toys, soaps or teethers.",
         "resolutionTitle": "Store discount",
         "resolutionValue": "10%",
-        "supportedDevices": "Exclusive content",
+        "supportedDevices": "Exclusive Content",
         "supportedDevicesValue": "Monthly newsletter.",
         "devicesAtHome": "Shipping cost",
         "devicesAtHomeValue": "COP 9,900"
@@ -33,22 +33,22 @@
         "resolution": "Natural Pet",
         "price": "COP 149,000",
         "monthlyPrice": "Monthly price",
-        "audioAndVideoQuality": "Product Box",
-        "audioAndVideoQualityValue": "3.5 kg bag of natural food. Toys, soaps, or chew toys. A different accessory each month.",
+        "audioAndVideoQuality": "Gift Box",
+        "audioAndVideoQualityValue": "3.5 kg bag  ration of natural food. Toys, soaps, or chew toys.different accessory.",
         "resolutionTitle": "ResolutionStore Discount",
         "resolutionValue": "15%",
         "supportedDevices": "Exclusive Content",
         "supportedDevicesValue": "Quarterly virtual workshop on animal welfare.",
         "devicesAtHome": "Shipping cost",
-        "devicesAtHomeValue": "Free shipping on all orders!"
+        "devicesAtHomeValue": "Free"
       },
       {
         "title": "Premium",
         "resolution": "Premium Guardian",
         "price": "COP 239,000",
         "monthlyPrice": "Monthly price",
-        "audioAndVideoQuality": "Product Box",
-        "audioAndVideoQualityValue": "Includes: A 5 kg ration of natural food (for the entire month). Two different snack additions each month.",
+        "audioAndVideoQuality": "Gift Box",
+        "audioAndVideoQualityValue": "5 kg of natural food (for the entire month). Two different snack additions.",
         "resolutionTitle": "Additional",
         "resolutionValue": "High-end accessories (harnesses, collars, and raincoats).",
         "spatialAudio": "Store Discount",
@@ -56,7 +56,7 @@
         "supportedDevices": "Exclusive Content",
         "supportedDevicesValue": "Quarterly virtual workshop + monthly webinar with experts.",
         "devicesAtHome": "Shipping",
-        "devicesAtHomeValue": "Free shipping on all orders!"
+        "devicesAtHomeValue": "Free"
       }
     ]
   },
