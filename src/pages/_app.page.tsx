@@ -70,7 +70,15 @@ const App = ({ Component, pageProps }: AppProps) => {
   const [items, setItems] = useState<CartItem[]>([]);
 
   const addItem = (item: CartItem) => {
-    setItems(prevItems => [...prevItems, item]);
+    setItems(prevItems => {
+      const existingItem = prevItems.find(i => i.id === item.id);
+      if (existingItem) {
+        return prevItems.map(i =>
+          i.id === item.id ? { ...i, quantity: i.quantity + item.quantity } : i,
+        );
+      }
+      return [...prevItems, item];
+    });
   };
 
   const removeItem = (id: string) => {
