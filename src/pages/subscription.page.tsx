@@ -80,10 +80,6 @@ const SubscriptionPage: NextPage = () => {
                   <Text>{plan.devicesAtHomeValue}</Text>
                 </HStack>
                 <Divider />
-          {/*       <HStack justify="space-between">
-                  <Text>{plan.downloadDevices}</Text>
-                  <Text>{plan.downloadDevicesValue}</Text>
-                </HStack> */}
               </VStack>
             </VStack>
           </Box>

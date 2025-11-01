@@ -1,10 +1,13 @@
-import { Box, Container, Flex, Grid, GridItem, Heading, Text, useTheme } from '@chakra-ui/react';
+import { Box, Button, Container, Flex, Grid, GridItem, Heading, Text, useDisclosure, useTheme } from '@chakra-ui/react';
 import { useContentfulInspectorMode } from '@contentful/live-preview/react';
+import { useState } from 'react';
 
 import { CtfImage } from '@src/components/features/contentful/ctf-image';
+import ShoppingCart from '@src/components/features/shopping-cart/ShoppingCart';
 import { FormatCurrency } from '@src/components/shared/format-currency';
 import { QuantitySelector } from '@src/components/shared/quantity-selector';
 import { PageProductFieldsFragment } from '@src/lib/__generated/sdk';
+import { useCart } from '@src/lib/cart';
 
 export const ProductDetails = ({
   name,
@@ -16,6 +19,16 @@ export const ProductDetails = ({
 }: PageProductFieldsFragment) => {
   const theme = useTheme();
   const inspectorProps = useContentfulInspectorMode({ entryId });
+  const { isOpen, onOpen, onClose } = useDisclosure();
+  const { addItem } = useCart();
+  const [quantity, setQuantity] = useState(1);
+
+  const handleAddToCart = () => {
+    if (name && price) {
+      addItem({ id: entryId, name, price, quantity });
+      onOpen();
+    }
+  };
 
   return (
     <Container mt={{ base: 6, lg: 16 }}>
@@ -66,11 +79,16 @@ export const ProductDetails = ({
             </Text>
 
             <Box mt={{ base: 5, lg: 10 }}>
-              <QuantitySelector />
+              <QuantitySelector onChange={setQuantity} />
+            </Box>
+
+            <Box mt={5}>
+              <Button onClick={handleAddToCart}>Add to Cart</Button>
             </Box>
           </Box>
         </GridItem>
       </Grid>
+      <ShoppingCart isOpen={isOpen} onClose={onClose} />
     </Container>
   );
 };

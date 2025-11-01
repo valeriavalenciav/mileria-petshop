@@ -3,9 +3,11 @@ import { ContentfulLivePreviewProvider } from '@contentful/live-preview/react';
 import localFont from '@next/font/local';
 import { appWithTranslation } from 'next-i18next';
 import type { AppProps } from 'next/app';
-import { useRouter } from "next/router"
+import { useRouter } from 'next/router';
+import { useState } from 'react';
 
 import { Layout } from '@src/components/templates/layout';
+import { CartContext, CartItem } from '@src/lib/cart';
 import { theme } from '@src/theme';
 
 const spaceGrotesk = localFont({
@@ -64,7 +66,22 @@ const spaceGrotesk = localFont({
 });
 
 const App = ({ Component, pageProps }: AppProps) => {
-  const router = useRouter()
+  const router = useRouter();
+  const [items, setItems] = useState<CartItem[]>([]);
+
+  const addItem = (item: CartItem) => {
+    setItems(prevItems => [...prevItems, item]);
+  };
+
+  const removeItem = (id: string) => {
+    setItems(prevItems => prevItems.filter(item => item.id !== id));
+  };
+
+  const updateItemQuantity = (id: string, quantity: number) => {
+    setItems(prevItems =>
+      prevItems.map(item => (item.id === id ? { ...item, quantity } : item)),
+    );
+  };
 
   return (
     <ContentfulLivePreviewProvider
@@ -79,9 +96,11 @@ const App = ({ Component, pageProps }: AppProps) => {
             body: `${spaceGrotesk.style.fontFamily}, ${theme.fonts.body}`,
           },
         }}>
-        <Layout>
-          <Component {...pageProps} />
-        </Layout>
+        <CartContext.Provider value={{ items, addItem, removeItem, updateItemQuantity }}>
+          <Layout>
+            <Component {...pageProps} />
+          </Layout>
+        </CartContext.Provider>
       </ChakraProvider>
     </ContentfulLivePreviewProvider>
   );
