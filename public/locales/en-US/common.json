@@ -10,8 +10,8 @@
     "language": "Language"
   },
   "subscription":{
-    "title": "Subscription to get green pet products",
-    "description": "We offer a subscription service for organic and artisanal pet products. You will receive a monthly box with a selection of our best products.",
+    "title": "Subscribe to receive eco-friendly products for your pets",
+    "description": "We offer a subscription service for organic and artisanal pet products. You will receive a monthly box with a selection of our best products and more.",
     "mostPopular": "Most popular",
     "plans": [
       {
@@ -30,33 +30,33 @@
       },
       {
         "title": "Standard",
-        "resolution": "1080p",
+        "resolution": "Natural Pet",
         "price": "COP 149,000",
         "monthlyPrice": "Monthly price",
-        "audioAndVideoQuality": "Audio and video quality",
-        "audioAndVideoQualityValue": "Excellent",
-        "resolutionTitle": "Resolution",
-        "resolutionValue": "1080p (Full HD)",
-        "supportedDevices": "Supported devices",
-        "supportedDevicesValue": "TV, computer, cell phone, tablet",
-        "devicesAtHome": "Devices at home where you can watch Netflix at the same time",
-        "devicesAtHomeValue": "2"
+        "audioAndVideoQuality": "Product Box",
+        "audioAndVideoQualityValue": "3.5 kg bag of natural food. Toys, soaps, or chew toys. A different accessory each month.",
+        "resolutionTitle": "ResolutionStore Discount",
+        "resolutionValue": "15%",
+        "supportedDevices": "Exclusive Content",
+        "supportedDevicesValue": "Quarterly virtual workshop on animal welfare.",
+        "devicesAtHome": "Shipping cost",
+        "devicesAtHomeValue": "Free shipping on all orders!"
       },
       {
         "title": "Premium",
-        "resolution": "4K + HDR",
+        "resolution": "Premium Guardian",
         "price": "COP 239,000",
         "monthlyPrice": "Monthly price",
-        "audioAndVideoQuality": "Audio and video quality",
-        "audioAndVideoQualityValue": "Optimal",
-        "resolutionTitle": "Resolution",
-        "resolutionValue": "4K (Ultra HD) + HDR",
-        "spatialAudio": "Spatial audio (immersive sound)",
-        "spatialAudioValue": "Included",
-        "supportedDevices": "Supported devices",
-        "supportedDevicesValue": "TV, computer, cell phone, tablet",
-        "devicesAtHome": "Devices at home where you can watch Netflix at the same time",
-        "devicesAtHomeValue": "4"
+        "audioAndVideoQuality": "Product Box",
+        "audioAndVideoQualityValue": "Includes: A 5 kg ration of natural food (for the entire month). Two different snack additions each month.",
+        "resolutionTitle": "Additional",
+        "resolutionValue": "High-end accessories (harnesses, collars, and raincoats).",
+        "spatialAudio": "Store Discount",
+        "spatialAudioValue": "20%",
+        "supportedDevices": "Exclusive Content",
+        "supportedDevicesValue": "Quarterly virtual workshop + monthly webinar with experts.",
+        "devicesAtHome": "Shipping",
+        "devicesAtHomeValue": "Free shipping on all orders!"
       }
     ]
   },
