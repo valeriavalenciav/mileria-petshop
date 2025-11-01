@@ -16,24 +16,22 @@
     "plans": [
       {
         "title": "Basic",
-        "resolution": "720p",
-        "price": "COP 18,900",
+        "resolution": "Happy Puppy",
+        "price": "COP 99,000",
         "monthlyPrice": "Monthly price",
-        "audioAndVideoQuality": "Audio and video quality",
-        "audioAndVideoQualityValue": "Good",
-        "resolutionTitle": "Resolution",
-        "resolutionValue": "720p (HD)",
-        "supportedDevices": "Supported devices",
-        "supportedDevicesValue": "TV, computer, cell phone, tablet",
-        "devicesAtHome": "Devices at home where you can watch Netflix at the same time",
-        "devicesAtHomeValue": "1",
-        "downloadDevices": "Download devices",
-        "downloadDevicesValue": "1"
+        "audioAndVideoQuality": "Product box",
+        "audioAndVideoQualityValue": "2.5 kg ration of natural food. Toys, soaps or teethers.",
+        "resolutionTitle": "Store discount",
+        "resolutionValue": "10%",
+        "supportedDevices": "Exclusive content",
+        "supportedDevicesValue": "Monthly newsletter.",
+        "devicesAtHome": "Shipping cost",
+        "devicesAtHomeValue": "COP 9,900"
       },
       {
         "title": "Standard",
         "resolution": "1080p",
-        "price": "COP 29,900",
+        "price": "COP 149,000",
         "monthlyPrice": "Monthly price",
         "audioAndVideoQuality": "Audio and video quality",
         "audioAndVideoQualityValue": "Excellent",
@@ -42,14 +40,12 @@
         "supportedDevices": "Supported devices",
         "supportedDevicesValue": "TV, computer, cell phone, tablet",
         "devicesAtHome": "Devices at home where you can watch Netflix at the same time",
-        "devicesAtHomeValue": "2",
-        "downloadDevices": "Download devices",
-        "downloadDevicesValue": "2"
+        "devicesAtHomeValue": "2"
       },
       {
         "title": "Premium",
         "resolution": "4K + HDR",
-        "price": "COP 44,900",
+        "price": "COP 239,000",
         "monthlyPrice": "Monthly price",
         "audioAndVideoQuality": "Audio and video quality",
         "audioAndVideoQualityValue": "Optimal",
@@ -60,9 +56,7 @@
         "supportedDevices": "Supported devices",
         "supportedDevicesValue": "TV, computer, cell phone, tablet",
         "devicesAtHome": "Devices at home where you can watch Netflix at the same time",
-        "devicesAtHomeValue": "4",
-        "downloadDevices": "Download devices",
-        "downloadDevicesValue": "6"
+        "devicesAtHomeValue": "4"
       }
     ]
   },
