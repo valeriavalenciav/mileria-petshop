@@ -28,6 +28,11 @@ export const Header = (props: BoxProps) => {
         </HStack>
       </Link>
       <HStack spacing="8">
+        <Link href="/products" title={t('common.products')}>
+          <Text fontSize="xl" fontWeight="bold">
+            Products
+          </Text>
+        </Link>
         <Link href="/subscription" title={t('common.subscription')}>
           <Text fontSize="xl" fontWeight="bold">
           Subscriptions
