@@ -8,7 +8,7 @@ export const theme = extendTheme({
   styles: { global: globalStyle },
   f36: tokens,
   colors: {
-    footerBg: '#F7FFFA',
+    footerBg: '#FDF6E7',
   },
   components: {
     Container: container,

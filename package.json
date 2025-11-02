@@ -60,6 +60,8 @@
     "@graphql-codegen/cli": "2.13.12",
     "@graphql-codegen/client-preset": "1.1.4",
     "@graphql-codegen/introspection": "2.2.1",
+    "@types/json-stable-stringify": "^1.1.0",
+    "@types/minimatch": "^5.1.2",
     "@types/node": "22.18.8",
     "@types/react": "18.0.25",
     "@types/react-dom": "18.0.9",

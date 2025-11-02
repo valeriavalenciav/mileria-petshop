@@ -1,13 +1,14 @@
-import { Box, Button, Drawer, DrawerBody, DrawerCloseButton, DrawerContent, DrawerFooter, DrawerHeader, DrawerOverlay, Heading, Text } from '@chakra-ui/react';
 
+import { Box, Button, Drawer, DrawerBody, DrawerCloseButton, DrawerContent, DrawerFooter, DrawerHeader, DrawerOverlay, Heading, Text, VStack } from '@chakra-ui/react';
 import { FormatCurrency } from '@src/components/shared/format-currency';
+import { QuantitySelector } from '@src/components/shared/quantity-selector';
 import { useCart } from '@src/lib/cart';
 
 const ShoppingCart = ({ isOpen, onClose }) => {
-  const { items, clearCart } = useCart();
+  const { items, clearCart, updateItemQuantity, removeItem } = useCart();
 
   return (
-    <Drawer isOpen={isOpen} placement="right" onClose={onClose}>
+    <Drawer isOpen={isOpen} placement="right" onClose={onClose} size="md">
       <DrawerOverlay />
       <DrawerContent>
         <DrawerCloseButton />
@@ -16,13 +17,25 @@ const ShoppingCart = ({ isOpen, onClose }) => {
           {items.length === 0 ? (
             <Text>Your cart is empty.</Text>
           ) : (
-            items.map(item => (
-              <Box key={item.id} mb={4}>
-                <Heading as="h4" size="md">{item.name}</Heading>
-                <Text>Price: <FormatCurrency value={item.price} /></Text>
-                <Text>Quantity: {item.quantity}</Text>
-              </Box>
-            ))
+            <VStack spacing={4}>
+              {items.map(item => (
+                <Box key={item.id} w="full" p={4} borderWidth="1px" borderRadius="md">
+                  <Heading as="h4" size="md">{item.name}</Heading>
+                  <Text>Price: <FormatCurrency value={item.price} /></Text>
+                  <QuantitySelector
+                    initialValue={item.quantity}
+                    onChange={newQuantity => updateItemQuantity(item.id, newQuantity)}
+                  />
+                  <Button
+                    mt={2}
+                    colorScheme="red"
+                    size="sm"
+                    onClick={() => removeItem(item.id)}>
+                    Remove
+                  </Button>
+                </Box>
+              ))}
+            </VStack>
           )}
         </DrawerBody>
         <DrawerFooter>
