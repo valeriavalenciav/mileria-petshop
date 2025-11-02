@@ -5,6 +5,7 @@ import { useState } from 'react';
 import { CtfImage } from '@src/components/features/contentful/ctf-image';
 import ShoppingCart from '@src/components/features/shopping-cart/ShoppingCart';
 import { FormatCurrency } from '@src/components/shared/format-currency';
+import { CartIcon } from '@src/components/shared/icons';
 import { QuantitySelector } from '@src/components/shared/quantity-selector';
 import { PageProductFieldsFragment } from '@src/lib/__generated/sdk';
 import { useCart } from '@src/lib/cart';
@@ -83,7 +84,7 @@ export const ProductDetails = ({
             </Box>
 
             <Box mt={5}>
-              <Button onClick={handleAddToCart}>Add to Cart</Button>
+              <Button onClick={handleAddToCart} leftIcon={<CartIcon />}>Add to Cart</Button>
             </Box>
           </Box>
         </GridItem>
