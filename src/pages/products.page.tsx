@@ -3,11 +3,11 @@ import { getServerSideTranslations } from './utils/get-serverside-translations';
 
 import { Container, Heading, SimpleGrid } from '@chakra-ui/react';
 import { client } from '@src/lib/client';
-import { PageProductCollectionDocument, PageProductCollectionQuery } from '@src/lib/__generated/sdk';
+import { PageProductCollectionQuery, PageProductFieldsFragment } from '@src/lib/__generated/sdk';
 import { ProductCard } from '@src/components/features/product/ProductCard';
 
 interface ProductsPageProps {
-  products: PageProductCollectionQuery['pageProductCollection']['items'];
+  products: (PageProductFieldsFragment | null)[];
 }
 
 const ProductsPage: NextPage<ProductsPageProps> = ({ products }) => {
@@ -16,7 +16,7 @@ const ProductsPage: NextPage<ProductsPageProps> = ({ products }) => {
       <Heading as="h1" mb={8}>All Products</Heading>
       <SimpleGrid columns={{ base: 1, md: 2, lg: 3 }} spacing={10}>
         {products.map(product => (
-          <ProductCard key={product.sys.id} product={product} />
+          product && <ProductCard key={product.sys.id} product={product} />
         ))}
       </SimpleGrid>
     </Container>
@@ -24,8 +24,7 @@ const ProductsPage: NextPage<ProductsPageProps> = ({ products }) => {
 };
 
 export const getStaticProps: GetStaticProps<ProductsPageProps> = async ({ locale }) => {
-  const data = await client.request<PageProductCollectionQuery>(
-    PageProductCollectionDocument,
+  const data = await client.pageProductCollection(
     {
       locale,
       preview: false,
