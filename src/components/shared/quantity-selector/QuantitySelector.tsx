@@ -37,8 +37,8 @@ export const QuantitySelector = ({ onChange, initialValue = 1 }) => {
         textTransform="uppercase">
         {t('product.quantity')}
       </Text>
-      <Flex flexDirection="row" mt={2}>
-        <Button onClick={handleDecrement} size="sm">
+      <Flex flexDirection="row" mt={2} alignItems="center">
+        <Button onClick={handleDecrement} size="md" height="100%">
           -
         </Button>
         <Input
@@ -48,8 +48,9 @@ export const QuantitySelector = ({ onChange, initialValue = 1 }) => {
           type="number"
           value={quantity}
           onChange={handleChange}
+          size="md"
         />
-        <Button onClick={handleIncrement} size="sm">
+        <Button onClick={handleIncrement} size="md" height="100%">
           +
         </Button>
       </Flex>

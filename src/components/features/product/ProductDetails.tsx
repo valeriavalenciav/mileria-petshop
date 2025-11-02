@@ -84,7 +84,7 @@ export const ProductDetails = ({
             </Box>
 
             <Box mt={5}>
-              <Button onClick={handleAddToCart} leftIcon={<CartIcon />}>Add to Cart</Button>
+              <Button onClick={handleAddToCart} leftIcon={<CartIcon />} bg="brandGreen">Add to Cart</Button>
             </Box>
           </Box>
         </GridItem>
