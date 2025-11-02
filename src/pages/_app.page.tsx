@@ -91,6 +91,10 @@ const App = ({ Component, pageProps }: AppProps) => {
     );
   };
 
+  const clearCart = () => {
+    setItems([]);
+  };
+
   return (
     <ContentfulLivePreviewProvider
       locale={router.locale || 'en-US'}
@@ -104,7 +108,7 @@ const App = ({ Component, pageProps }: AppProps) => {
             body: `${spaceGrotesk.style.fontFamily}, ${theme.fonts.body}`,
           },
         }}>
-        <CartContext.Provider value={{ items, addItem, removeItem, updateItemQuantity }}>
+        <CartContext.Provider value={{ items, addItem, removeItem, updateItemQuantity, clearCart }}>
           <Layout>
             <Component {...pageProps} />
           </Layout>

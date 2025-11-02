@@ -4,7 +4,7 @@ import { FormatCurrency } from '@src/components/shared/format-currency';
 import { useCart } from '@src/lib/cart';
 
 const ShoppingCart = ({ isOpen, onClose }) => {
-  const { items } = useCart();
+  const { items, clearCart } = useCart();
 
   return (
     <Drawer isOpen={isOpen} placement="right" onClose={onClose}>
@@ -26,6 +26,11 @@ const ShoppingCart = ({ isOpen, onClose }) => {
           )}
         </DrawerBody>
         <DrawerFooter>
+          {items.length > 0 && (
+            <Button colorScheme="red" mr={3} onClick={clearCart}>
+              Clear Cart
+            </Button>
+          )}
           <Button variant="outline" mr={3} onClick={onClose}>
             Close
           </Button>
