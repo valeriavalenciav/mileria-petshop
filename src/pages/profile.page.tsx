@@ -20,9 +20,15 @@ const ProfilePage: NextPage<ProfilePageProps> = ({ user }) => {
   return (
     <Container mt={{ base: 6, lg: 16 }}>
       <Heading as="h1" mb={8}>User Profile</Heading>
-      <HStack spacing={8} alignItems="flex-start">
+      <HStack spacing={8} alignItems="center">
         <Avatar size="xl" name={user.name} src={user.photoURL} />
-        <VStack align="left">
+        <VStack
+          align="left"
+          borderWidth="1px"
+          borderColor="gray.200"
+          borderRadius="md"
+          p={4}
+        >
           <Text><strong>Name:</strong> {user.name}</Text>
           <Text><strong>Email:</strong> {user.email}</Text>
         </VStack>
