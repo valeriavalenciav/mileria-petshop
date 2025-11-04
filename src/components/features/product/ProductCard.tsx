@@ -41,7 +41,7 @@ export const ProductCard = ({ product }: ProductCardProps) => {
           <HeartIcon 
             w={8} 
             h={8} 
-            color='gray.400'
+            color='gray.800'
             fill={isFavorited ? 'favorite' : 'white'} 
           />
         </Box>
