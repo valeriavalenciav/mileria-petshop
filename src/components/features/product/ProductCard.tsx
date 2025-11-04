@@ -1,10 +1,8 @@
-
 import { Box, Heading, Text, VStack } from '@chakra-ui/react';
 import Link from 'next/link';
 import { CtfImage } from '@src/components/features/contentful/ctf-image';
 import { PageProductFieldsFragment } from '@src/lib/__generated/sdk';
 import { FormatCurrency } from '@src/components/shared/format-currency';
-import { FaHeart } from 'react-icons/fa';
 
 interface ProductCardProps {
   product: PageProductFieldsFragment;
@@ -14,38 +12,16 @@ export const ProductCard = ({ product }: ProductCardProps) => {
   const { name, price, featuredProductImage, slug } = product;
 
   return (
-    <Box>
-      <Box position="relative">
+    <Link href={`/${slug}`} passHref>
+      <VStack as="a" spacing={4} align="stretch">
         {featuredProductImage && (
-          <Link href={`/${slug}`} passHref>
-            <Box as="a">
-              <CtfImage {...featuredProductImage} />
-            </Box>
-          </Link>
+          <Box>
+            <CtfImage {...featuredProductImage} />
+          </Box>
         )}
-        <Box
-          position="absolute"
-          top="2"
-          right="2"
-          cursor="pointer"
-          onClick={(e) => {
-            e.stopPropagation();
-            // Favorite functionality to be added later
-            console.log("Favorite clicked");
-          }}
-          w={6}
-          h={6}
-          color="gray.400"
-        >
-          <FaHeart size="100%" />
-        </Box>
-      </Box>
-      <Link href={`/${slug}`} passHref>
-        <VStack as="a" spacing={4} align="stretch" mt={4}>
-          <Heading as="h3" size="md">{name}</Heading>
-          {price && <Text><FormatCurrency value={price} /></Text>}
-        </VStack>
-      </Link>
-    </Box>
+        <Heading as="h3" size="md">{name}</Heading>
+        {price && <Text><FormatCurrency value={price} /></Text>}
+      </VStack>
+    </Link>
   );
 };
