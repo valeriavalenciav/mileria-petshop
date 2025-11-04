@@ -52,6 +52,9 @@ export const Header = (props: BoxProps) => {
           <MenuItem as={Link} href="/subscription">
             Subscriptions
           </MenuItem>
+          <MenuItem as={Link} href="/profile">
+            Profile
+          </MenuItem>
         </MenuList>
       </Menu>
     </Flex>
@@ -87,6 +90,11 @@ export const Header = (props: BoxProps) => {
             <Link href="/subscription" title={t('common.subscription')}>
               <Text fontSize="xl" fontWeight="bold">
                 Subscriptions
+              </Text>
+            </Link>
+            <Link href="/profile" title={t('common.profile')}>
+              <Text fontSize="xl" fontWeight="bold">
+                Profile
               </Text>
             </Link>
             <Box as="button" onClick={onOpen} position="relative">
