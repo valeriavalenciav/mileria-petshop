@@ -1,4 +1,4 @@
-import { Layout } from '@components/templates/layout';
+import { Layout } from '@src/components/templates/layout';
 
 const ProfilePage = () => {
   return (
