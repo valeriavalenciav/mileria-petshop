@@ -1,6 +1,7 @@
 
 import { Box, Heading, Text, VStack } from '@chakra-ui/react';
 import Link from 'next/link';
+import { useState } from 'react';
 import { CtfImage } from '@src/components/features/contentful/ctf-image';
 import { PageProductFieldsFragment } from '@src/lib/__generated/sdk';
 import { FormatCurrency } from '@src/components/shared/format-currency';
@@ -12,6 +13,13 @@ interface ProductCardProps {
 
 export const ProductCard = ({ product }: ProductCardProps) => {
   const { name, price, featuredProductImage, slug } = product;
+  const [isFavorited, setIsFavorited] = useState(false);
+
+  const handleFavoriteClick = (e: React.MouseEvent<HTMLDivElement>) => {
+    e.stopPropagation();
+    setIsFavorited(!isFavorited);
+    console.log("Favorite status:", !isFavorited);
+  };
 
   return (
     <Box>
@@ -28,13 +36,14 @@ export const ProductCard = ({ product }: ProductCardProps) => {
           top="2"
           right="2"
           cursor="pointer"
-          onClick={(e) => {
-            e.stopPropagation();
-            // Favorite functionality to be added later
-            console.log("Favorite clicked");
-          }}
+          onClick={handleFavoriteClick}
         >
-          <HeartIcon w={6} h={6} color="gray.400" />
+          <HeartIcon 
+            w={6} 
+            h={6} 
+            color={isFavorited ? 'favorite' : 'gray.400'} 
+            fill={isFavorited ? 'favorite' : 'none'} 
+          />
         </Box>
       </Box>
       <Link href={`/${slug}`} passHref>

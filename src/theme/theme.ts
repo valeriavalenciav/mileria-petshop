@@ -1,3 +1,4 @@
+
 import { extendTheme, OrderedList } from '@chakra-ui/react';
 import tokens from '@contentful/f36-tokens';
 
@@ -10,6 +11,7 @@ export const theme = extendTheme({
   colors: {
     footerBg: '#FDF6E7',
     brandGreen: '#DCFCE7',
+    favorite: '#FF637E',
   },
   components: {
     Container: container,
