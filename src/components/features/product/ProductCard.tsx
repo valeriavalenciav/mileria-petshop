@@ -39,10 +39,10 @@ export const ProductCard = ({ product }: ProductCardProps) => {
           onClick={handleFavoriteClick}
         >
           <HeartIcon 
-            w={6} 
-            h={6} 
-            color={isFavorited ? 'favorite' : 'gray.400'} 
-            fill={isFavorited ? 'favorite' : 'none'} 
+            w={8} 
+            h={8} 
+            color='gray.400'
+            fill={isFavorited ? 'favorite' : 'white'} 
           />
         </Box>
       </Box>
