@@ -5,8 +5,7 @@ import { useState } from 'react';
 import { CtfImage } from '@src/components/features/contentful/ctf-image';
 import { PageProductFieldsFragment } from '@src/lib/__generated/sdk';
 import { FormatCurrency } from '@src/components/shared/format-currency';
-import { HeartFilledIcon } from '@src/components/shared/icons/HeartFilledIcon';
-import { HeartOutlineIcon } from '@src/components/shared/icons/HeartOutlineIcon';
+import { HeartIcon } from '@src/components/shared/icons/HeartIcon';
 
 interface ProductCardProps {
   product: PageProductFieldsFragment;
@@ -39,19 +38,12 @@ export const ProductCard = ({ product }: ProductCardProps) => {
           cursor="pointer"
           onClick={handleFavoriteClick}
         >
-          {isFavorited ? (
-            <HeartFilledIcon 
-              w={8} 
-              h={8} 
-              color="#FF637E"
-            />
-          ) : (
-            <HeartOutlineIcon 
-              w={8} 
-              h={8} 
-              color='gray.800'
-            />
-          )}
+          <HeartIcon 
+            w={8} 
+            h={8} 
+            color='gray.800'
+            fill={isFavorited ? '#FF637E' : 'white'} 
+          />
         </Box>
       </Box>
       <Link href={`/${slug}`} passHref>
