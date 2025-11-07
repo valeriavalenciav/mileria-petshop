@@ -12,6 +12,8 @@ fragment BasePageProductFields on PageProduct {
   name
   description
   price
+  productId
+  discount
   featuredProductImage {
     ...ImageFields
   }

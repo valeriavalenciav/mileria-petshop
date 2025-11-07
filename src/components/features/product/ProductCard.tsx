@@ -13,13 +13,28 @@ interface ProductCardProps {
 }
 
 export const ProductCard = ({ product }: ProductCardProps) => {
-  const { name, price, featuredProductImage, slug } = product;
+  const { name, price, featuredProductImage, slug, productId } = product;
   const [isFavorited, setIsFavorited] = useState(false);
 
-  const handleFavoriteClick = (e: React.MouseEvent<HTMLDivElement>) => {
+  const handleFavoriteClick = async (e: React.MouseEvent<HTMLDivElement>) => {
     e.stopPropagation();
-    setIsFavorited(!isFavorited);
-    console.log("Favorite status:", !isFavorited);
+    const newFavoritedStatus = !isFavorited;
+    setIsFavorited(newFavoritedStatus);
+
+    try {
+      const method = newFavoritedStatus ? 'POST' : 'DELETE';
+      await fetch('/api/favorites', {
+        method,
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ userId: 'mileria@example.com', productId }),
+      });
+    } catch (error) {
+      console.error('Failed to update favorite status:', error);
+      // Revert the state if the API call fails
+      setIsFavorited(!newFavoritedStatus);
+    }
   };
 
   return (
