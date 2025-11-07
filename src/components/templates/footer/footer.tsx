@@ -1,6 +1,7 @@
 import { Container, Box, Text, Link, useTheme, Flex } from '@chakra-ui/react';
-import { useTranslation } from 'next-i18next';
 import NextLink from 'next/link';
+import { useTranslation } from 'next-i18next';
+
 import { SocialMedia } from '@src/components/shared/social-media';
 
 export const Footer = () => {

@@ -1,10 +1,11 @@
+import { Container, Heading, SimpleGrid } from '@chakra-ui/react';
 import { GetStaticProps, NextPage } from 'next';
+
 import { getServerSideTranslations } from './utils/get-serverside-translations';
 
-import { Container, Heading, SimpleGrid } from '@chakra-ui/react';
-import { client } from '@src/lib/client';
-import { PageProductCollectionQuery, PageProductFieldsFragment } from '@src/lib/__generated/sdk';
 import { ProductCard } from '@src/components/features/product/ProductCard';
+import { PageProductCollectionQuery, PageProductFieldsFragment } from '@src/lib/__generated/sdk';
+import { client } from '@src/lib/client';
 
 interface ProductsPageProps {
   products: (PageProductFieldsFragment | null)[];

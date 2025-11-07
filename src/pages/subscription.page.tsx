@@ -1,8 +1,9 @@
 import { Box, Container, Heading, Text, Flex, VStack, HStack, Divider } from '@chakra-ui/react';
 import { NextPage } from 'next';
 import { useTranslation } from 'next-i18next';
-import { getServerSideTranslations } from './utils/get-serverside-translations';
 import { useState } from 'react';
+
+import { getServerSideTranslations } from './utils/get-serverside-translations';
 
 const SubscriptionPage: NextPage = () => {
   const { t } = useTranslation();

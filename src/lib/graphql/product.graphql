@@ -40,3 +40,11 @@ query pageProduct($slug: String!, $locale: String, $preview: Boolean) {
     }
   }
 }
+
+query pageProductCollection($locale: String, $preview: Boolean, $where: PageProductFilter) {
+  pageProductCollection(locale: $locale, preview: $preview, where: $where) {
+    items {
+      ...PageProductFields
+    }
+  }
+}

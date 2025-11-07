@@ -12,8 +12,8 @@ import {
   useBreakpointValue,
   useDisclosure,
 } from '@chakra-ui/react';
-import { useTranslation } from 'next-i18next';
 import Link from 'next/link';
+import { useTranslation } from 'next-i18next';
 
 import ShoppingCart from '@src/components/features/shopping-cart/ShoppingCart';
 import { CartIcon, MenuIcon } from '@src/components/shared/icons';

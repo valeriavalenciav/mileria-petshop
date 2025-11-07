@@ -1,6 +1,7 @@
 import { Container, Heading, Text } from '@chakra-ui/react';
 import { NextPage } from 'next';
 import { useTranslation } from 'next-i18next';
+
 import { getServerSideTranslations } from './utils/get-serverside-translations';
 
 const AccessibilityStatement: NextPage = () => {

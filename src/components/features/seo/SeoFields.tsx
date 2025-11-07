@@ -1,5 +1,5 @@
-import { NextSeo } from 'next-seo';
 import { useRouter } from 'next/router';
+import { NextSeo } from 'next-seo';
 import URI from 'urijs';
 
 import { SeoFieldsFragment } from '@src/lib/__generated/sdk';

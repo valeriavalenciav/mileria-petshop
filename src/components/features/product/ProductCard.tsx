@@ -2,11 +2,12 @@
 import { Box, Heading, Text, VStack } from '@chakra-ui/react';
 import Link from 'next/link';
 import { useState } from 'react';
+
 import { CtfImage } from '@src/components/features/contentful/ctf-image';
-import { PageProductFieldsFragment } from '@src/lib/__generated/sdk';
 import { FormatCurrency } from '@src/components/shared/format-currency';
 import { HeartFilledIcon } from '@src/components/shared/icons/HeartFilledIcon';
 import { HeartOutlineIcon } from '@src/components/shared/icons/HeartOutlineIcon';
+import { PageProductFieldsFragment } from '@src/lib/__generated/sdk';
 
 interface ProductCardProps {
   product: PageProductFieldsFragment;

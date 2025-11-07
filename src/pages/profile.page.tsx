@@ -1,12 +1,13 @@
 
+import { Avatar, Container, Heading, HStack, VStack, Text, SimpleGrid } from '@chakra-ui/react';
 import { GetServerSideProps, NextPage } from 'next';
+
 import { getServerSideTranslations } from './utils/get-serverside-translations';
 
-import { Avatar, Container, Heading, HStack, VStack, Text, SimpleGrid } from '@chakra-ui/react';
-import { getFavorites } from '@src/lib/favorites';
-import { client } from '@src/lib/client';
-import { PageProductFieldsFragment } from '@src/lib/__generated/sdk';
 import { ProductCard } from '@src/components/features/product/ProductCard';
+import { PageProductFieldsFragment } from '@src/lib/__generated/sdk';
+import { client } from '@src/lib/client';
+import { getFavorites } from '@src/lib/favorites';
 
 // Placeholder for user data. In a real application, this would
 // come from a database or an authentication service.
@@ -61,7 +62,7 @@ export const getServerSideProps: GetServerSideProps<ProfilePageProps> = async ({
 
   const favoriteProductsData = await client.pageProductCollection({
     where: {
-      productId_in: favoriteProductIds,
+      productId_in: favoriteProductIds.map(Number),
     },
     locale,
   });

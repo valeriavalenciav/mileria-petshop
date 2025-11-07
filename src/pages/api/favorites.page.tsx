@@ -1,5 +1,6 @@
 
 import { NextApiRequest, NextApiResponse } from 'next';
+
 import { addFavorite, getFavorites, removeFavorite } from '@src/lib/favorites';
 
 export default function handler(req: NextApiRequest, res: NextApiResponse) {

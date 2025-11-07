@@ -1,4 +1,5 @@
 import { Flex, Link } from '@chakra-ui/react';
+
 import { FacebookIcon, InstagramIcon, TikTokIcon } from '@src/components/shared/icons';
 
 export const SocialMedia = () => {

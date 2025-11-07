@@ -1437,6 +1437,7 @@ export type PageProductQuery = { __typename?: 'Query', pageProductCollection?: {
 export type PageProductCollectionQueryVariables = Exact<{
   locale?: InputMaybe<Scalars['String']>;
   preview?: InputMaybe<Scalars['Boolean']>;
+  where?: InputMaybe<PageProductFilter>;
 }>;
 
 
@@ -1614,8 +1615,8 @@ ${BasePageProductFieldsFragmentDoc}
 ${SeoFieldsFragmentDoc}
 ${ImageFieldsFragmentDoc}`;
 export const PageProductCollectionDocument = gql`
-    query pageProductCollection($locale: String, $preview: Boolean) {
-  pageProductCollection(limit: 100, locale: $locale, preview: $preview) {
+    query pageProductCollection($locale: String, $preview: Boolean, $where: PageProductFilter) {
+  pageProductCollection(locale: $locale, preview: $preview, where: $where) {
     items {
       ...PageProductFields
     }

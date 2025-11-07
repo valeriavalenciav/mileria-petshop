@@ -1,7 +1,7 @@
 import { Text, Container, Flex, Heading, Link as TextLink, useTheme } from '@chakra-ui/react';
 import { GetStaticProps } from 'next';
-import { Trans, useTranslation } from 'next-i18next';
 import Link from 'next/link';
+import { Trans, useTranslation } from 'next-i18next';
 
 import { getServerSideTranslations } from '@src/pages/utils/get-serverside-translations';
 
