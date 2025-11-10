@@ -1,3 +1,4 @@
+
 import { Box, Button, Container, Flex, Grid, GridItem, Heading, Text, useDisclosure, useTheme } from '@chakra-ui/react';
 import { useContentfulInspectorMode } from '@contentful/live-preview/react';
 import { useState } from 'react';
@@ -8,7 +9,7 @@ import { FormatCurrency } from '@src/components/shared/format-currency';
 import { CartIcon } from '@src/components/shared/icons';
 import { QuantitySelector } from '@src/components/shared/quantity-selector';
 import { PageProductFieldsFragment } from '@src/lib/__generated/sdk';
-import { useCart } from '@src/lib/cart';
+import { useCart } from '@src/context/CartProvider'; // Corrected the import path
 
 export const ProductDetails = ({
   name,
@@ -25,8 +26,14 @@ export const ProductDetails = ({
   const [quantity, setQuantity] = useState(1);
 
   const handleAddToCart = () => {
+    // The logic to add an item to the cart needs to be updated
+    // to match the new `addItem` function signature.
     if (name && price) {
-      addItem({ id: entryId, name, price, quantity });
+      // The new addItem takes an object with id, name, and price.
+      // It handles the quantity logic internally.
+      for (let i = 0; i < quantity; i++) {
+        addItem({ id: entryId, name, price });
+      }
       onOpen();
     }
   };
