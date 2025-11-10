@@ -1,5 +1,6 @@
 
 import { Box, Button, Drawer, DrawerBody, DrawerCloseButton, DrawerContent, DrawerFooter, DrawerHeader, DrawerOverlay, Heading, Text, VStack } from '@chakra-ui/react';
+import Link from 'next/link';
 
 import { FormatCurrency } from '@src/components/shared/format-currency';
 import { QuantitySelector } from '@src/components/shared/quantity-selector';
@@ -40,6 +41,11 @@ const ShoppingCart = ({ isOpen, onClose }) => {
           )}
         </DrawerBody>
         <DrawerFooter>
+          <Link href="/checkout" passHref>
+            <Button as="a" colorScheme="blue" mr={3}>
+              ir a comparar
+            </Button>
+          </Link>
           {items.length > 0 && (
             <Button colorScheme="red" mr={3} onClick={clearCart}>
               Clear Cart
