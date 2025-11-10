@@ -1,13 +1,13 @@
+
 import { ChakraProvider } from '@chakra-ui/react';
 import { ContentfulLivePreviewProvider } from '@contentful/live-preview/react';
 import localFont from '@next/font/local';
 import type { AppProps } from 'next/app';
 import { useRouter } from 'next/router';
 import { appWithTranslation } from 'next-i18next';
-import { useState } from 'react';
 
 import { Layout } from '@src/components/templates/layout';
-import { CartContext, CartItem } from '@src/lib/cart';
+import { CartProvider } from '@src/context/CartProvider'; // Import the new provider
 import { theme } from '@src/theme';
 
 const spaceGrotesk = localFont({
@@ -67,33 +67,8 @@ const spaceGrotesk = localFont({
 
 const App = ({ Component, pageProps }: AppProps) => {
   const router = useRouter();
-  const [items, setItems] = useState<CartItem[]>([]);
 
-  const addItem = (item: CartItem) => {
-    setItems(prevItems => {
-      const existingItem = prevItems.find(i => i.id === item.id);
-      if (existingItem) {
-        return prevItems.map(i =>
-          i.id === item.id ? { ...i, quantity: i.quantity + item.quantity } : i,
-        );
-      }
-      return [...prevItems, item];
-    });
-  };
-
-  const removeItem = (id: string) => {
-    setItems(prevItems => prevItems.filter(item => item.id !== id));
-  };
-
-  const updateItemQuantity = (id: string, quantity: number) => {
-    setItems(prevItems =>
-      prevItems.map(item => (item.id === id ? { ...item, quantity } : item)),
-    );
-  };
-
-  const clearCart = () => {
-    setItems([]);
-  };
+  // All old cart state and logic has been removed from here.
 
   return (
     <ContentfulLivePreviewProvider
@@ -108,11 +83,12 @@ const App = ({ Component, pageProps }: AppProps) => {
             body: `${spaceGrotesk.style.fontFamily}, ${theme.fonts.body}`,
           },
         }}>
-        <CartContext.Provider value={{ items, addItem, removeItem, updateItemQuantity, clearCart }}>
+        {/* Wrap the entire application with the new CartProvider */}
+        <CartProvider>
           <Layout>
             <Component {...pageProps} />
           </Layout>
-        </CartContext.Provider>
+        </CartProvider>
       </ChakraProvider>
     </ContentfulLivePreviewProvider>
   );

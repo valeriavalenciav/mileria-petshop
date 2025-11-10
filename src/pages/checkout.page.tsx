@@ -1,11 +1,11 @@
 
 import { useState, useEffect } from 'react';
 import { Container, Heading, Text } from '@chakra-ui/react';
-import { GetStaticProps, NextPage } from 'next';
+import { GetServerSideProps, NextPage } from 'next'; // Changed to GetServerSideProps
 import { loadStripe, StripeElementsOptions } from '@stripe/stripe-js';
 import { Elements } from '@stripe/react-stripe-js';
 
-import { useCart } from '@src/lib/cart';
+import { useCart } from '@src/context/CartProvider'; // Corrected the import path
 import { getServerSideTranslations } from '@src/pages/utils/get-serverside-translations';
 import { CheckoutForm } from '@src/components/features/checkout/CheckoutForm';
 
@@ -13,14 +13,11 @@ const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY!
 
 const CheckoutPage: NextPage = () => {
   const [clientSecret, setClientSecret] = useState('');
-  const { items } = useCart();
+  const { items, totalAmount } = useCart(); // Now using the correct cart context
 
   useEffect(() => {
-    // Calculate the total amount from the cart items.
-    const totalAmount = items.reduce((total, item) => total + item.price * item.quantity, 0);
     const amountInCents = Math.round(totalAmount * 100);
 
-    // Only create a PaymentIntent if there are items in the cart.
     if (amountInCents > 0) {
       fetch('/api/create-payment-intent', {
         method: 'POST',
@@ -34,7 +31,8 @@ const CheckoutPage: NextPage = () => {
           }
         });
     }
-  }, [items]); // The dependency array ensures this runs when the cart changes.
+    // If amount is 0, clientSecret remains empty and the form won't be shown.
+  }, [totalAmount]); // Depend on totalAmount from the global context
 
   const appearance: StripeElementsOptions['appearance'] = {
     theme: 'stripe',
@@ -60,7 +58,8 @@ const CheckoutPage: NextPage = () => {
   );
 };
 
-export const getStaticProps: GetStaticProps = async ({ locale }) => {
+// Changed from getStaticProps to getServerSideProps for dynamic pages
+export const getServerSideProps: GetServerSideProps = async ({ locale }) => {
   return {
     props: {
       ...(await getServerSideTranslations(locale)),

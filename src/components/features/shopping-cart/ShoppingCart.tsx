@@ -4,7 +4,7 @@ import Link from 'next/link';
 
 import { FormatCurrency } from '@src/components/shared/format-currency';
 import { QuantitySelector } from '@src/components/shared/quantity-selector';
-import { useCart } from '@src/lib/cart';
+import { useCart } from '@src/context/CartProvider'; // Corrected the import path
 
 const ShoppingCart = ({ isOpen, onClose }) => {
   const { items, clearCart, updateItemQuantity, removeItem } = useCart();
