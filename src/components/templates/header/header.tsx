@@ -11,12 +11,14 @@ import {
   Text,
   useBreakpointValue,
   useDisclosure,
+  Circle,
 } from '@chakra-ui/react';
 import Link from 'next/link';
 import { useTranslation } from 'next-i18next';
 
 import ShoppingCart from '@src/components/features/shopping-cart/ShoppingCart';
 import { CartIcon, MenuIcon } from '@src/components/shared/icons';
+import { useCart } from '@src/context/CartProvider'; // Importar el hook del carrito
 
 export const HEADER_HEIGHT = 60;
 
@@ -24,6 +26,33 @@ export const Header = (props: BoxProps) => {
   const { t } = useTranslation();
   const { isOpen, onOpen, onClose } = useDisclosure();
   const isMobile = useBreakpointValue({ base: true, md: false });
+  const { items } = useCart(); // Obtener los ítems del carrito
+
+  // Calcular la cantidad total de productos en el carrito
+  const totalItems = items.reduce((total, item) => total + item.quantity, 0);
+
+  const CartButton = () => (
+    <Box as="button" onClick={onOpen} position="relative" p={2}>
+      <CartIcon />
+      {totalItems > 0 && (
+        <Circle
+          size="20px"
+          position="absolute"
+          top="-5px"
+          right="-5px"
+          bg="blue.500"
+          color="white"
+          fontSize="xs"
+          display="flex"
+          alignItems="center"
+          justifyContent="center"
+          border="2px solid white"
+        >
+          {totalItems}
+        </Circle>
+      )}
+    </Box>
+  );
 
   const MobileNav = () => (
     <Flex width="100%" justifyContent="space-between" alignItems="center">
@@ -31,9 +60,7 @@ export const Header = (props: BoxProps) => {
         <IconButton aria-label="Options" icon={<MenuIcon />} variant="outline" />
       </Box>
 
-      <Box as="button" onClick={onOpen} position="relative">
-        <CartIcon />
-      </Box>
+      <CartButton />
 
       <Menu>
         <MenuButton
@@ -97,9 +124,7 @@ export const Header = (props: BoxProps) => {
                 Profile
               </Text>
             </Link>
-            <Box as="button" onClick={onOpen} position="relative">
-              <CartIcon />
-            </Box>
+            <CartButton />
           </HStack>
         </>
       )}
