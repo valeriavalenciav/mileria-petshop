@@ -1,6 +1,7 @@
 import {
   Box,
   BoxProps,
+  Circle,
   Flex,
   HStack,
   IconButton,
@@ -11,9 +12,9 @@ import {
   Text,
   useBreakpointValue,
   useDisclosure,
-  Circle,
 } from '@chakra-ui/react';
 import Link from 'next/link';
+import { useRouter } from 'next/router';
 import { useTranslation } from 'next-i18next';
 
 import ShoppingCart from '@src/components/features/shopping-cart/ShoppingCart';
@@ -27,6 +28,10 @@ export const Header = (props: BoxProps) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const isMobile = useBreakpointValue({ base: true, md: false });
   const { items } = useCart();
+  const router = useRouter();
+
+  const isHomepage = router.pathname === '/';
+  const headerColor = isHomepage ? 'white' : 'inherit';
 
   const totalItems = items.reduce((total, item) => total + item.quantity, 0);
 
@@ -55,7 +60,7 @@ export const Header = (props: BoxProps) => {
 
   const MobileNav = () => (
     <Flex width="100%" justifyContent="space-between" alignItems="center">
-      <Box visibility="hidden"> 
+      <Box visibility="hidden">
         <IconButton aria-label="Options" icon={<MenuIcon />} variant="outline" />
       </Box>
 
@@ -65,9 +70,10 @@ export const Header = (props: BoxProps) => {
         <MenuButton
           as={IconButton}
           aria-label="Options"
-          icon={<MenuIcon />}          variant="outline"
+          icon={<MenuIcon />}
+          variant="outline"
         />
-        <MenuList>
+        <MenuList color="gray.800">
           <MenuItem as={Link} href="/">
             Homepage
           </MenuItem>
@@ -94,7 +100,9 @@ export const Header = (props: BoxProps) => {
       pr={{ base: 4, md: 12, lg: 12 }}
       height={`${HEADER_HEIGHT}px`}
       zIndex="2"
-      {...props}>
+      color={headerColor}
+      {...props}
+    >
       {isMobile ? (
         <MobileNav />
       ) : (
