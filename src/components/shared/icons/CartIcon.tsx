@@ -5,7 +5,7 @@ export const CartIcon = createIcon({
   viewBox: '0 0 24 24',
   // Set fill to 'none' as a default for the icon.
   // This ensures only the stroke is colored, not the inside of the shapes.
-  defaultProps: { fill: 'none' },
+  defaultProps: { fill: 'white' },
   path: (
     <>
       <path
