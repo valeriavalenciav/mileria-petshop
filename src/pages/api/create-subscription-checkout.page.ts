@@ -8,7 +8,6 @@ if (!process.env.STRIPE_SECRET_KEY) {
 }
 
 // Initialize Stripe with the secret key.
-// The apiVersion property is optional and has been removed to resolve a TypeScript error.
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
 
 /**
@@ -35,26 +34,22 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
     // Create a new Checkout Session with Stripe.
     const session = await stripe.checkout.sessions.create({
       payment_method_types: ['card'],
-      // The line_items array should contain the Price ID of the subscription.
       line_items: [
         {
           price: priceId,
           quantity: 1,
         },
       ],
-      // Set the mode to 'subscription'.
       mode: 'subscription',
-      // Define the URLs for successful and cancelled payments.
-      // The user will be redirected to these URLs by Stripe.
-      success_url: `${YOUR_DOMAIN}/?subscription_success=true&session_id={CHECKOUT_SESSION_ID}`,
-      cancel_url: `${YOUR_DOMAIN}/subscription`,
+      // Redirect to the new payment status page for both success and cancellation.
+      success_url: `${YOUR_DOMAIN}/payment-status?session_id={CHECKOUT_SESSION_ID}`,
+      cancel_url: `${YOUR_DOMAIN}/payment-status?session_id={CHECKOUT_SESSION_ID}`,
     });
 
     // If the session is created successfully, send back its URL.
     if (session.url) {
       res.status(200).json({ url: session.url });
     } else {
-      // This case should ideally not happen if the session is created.
       res.status(500).json({ error: { message: 'Stripe session was created but is missing a URL.' } });
     }
 
