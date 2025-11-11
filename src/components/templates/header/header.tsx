@@ -36,7 +36,13 @@ export const Header = (props: BoxProps) => {
   const totalItems = items.reduce((total, item) => total + item.quantity, 0);
 
   const CartButton = () => (
-    <Box as="button" onClick={onOpen} position="relative" p={2}>
+    <Box
+      as="button"
+      onClick={onOpen}
+      position="relative"
+      p={2}
+      color={headerColor} // Aplicar color directamente al botón del carrito
+    >
       <CartIcon />
       {totalItems > 0 && (
         <Circle
@@ -72,6 +78,7 @@ export const Header = (props: BoxProps) => {
           aria-label="Options"
           icon={<MenuIcon />}
           variant="outline"
+          color={headerColor} // Aplicar color directamente al icono del menú
         />
         <MenuList color="gray.800">
           <MenuItem as={Link} href="/">
