@@ -1,5 +1,5 @@
 
-import { Box, Button, Container, Heading, Text, Flex, VStack, HStack, Divider, Spinner } from '@chakra-ui/react';
+import { Box, Button, Container, Heading, Text, Flex, VStack, HStack, Divider, Spinner, Spacer } from '@chakra-ui/react';
 import { NextPage } from 'next';
 import { useTranslation } from 'next-i18next';
 import { useState } from 'react';
@@ -10,7 +10,7 @@ import { getServerSideTranslations } from './utils/get-serverside-translations';
 // Initialize Stripe.js with your publishable key.
 const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY!);
 
-// Replace with your actual Stripe Price IDs.
+// Stripe Price IDs.
 const STRIPE_PRICE_IDS = {
   Basic: 'price_1SS1uwJuAMA27hfRcFT6niD1',
   Premium: 'price_1SS27MJuAMA27hfRNzzBzCPn',
@@ -84,19 +84,21 @@ const SubscriptionPage: NextPage = () => {
             }}
             onClick={() => setSelectedPlan(plan.title)}
             cursor="pointer"
+            display="flex" // Ensure the card itself is a flex container
+            flexDirection="column" // Stack children vertically
           >
             {plan.title === 'Premium' && (
               <Box className="most-popular-banner">
                 {t('subscription.mostPopular')}
               </Box>
             )}
-            <VStack align="stretch" spacing={5}>
+            <VStack align="stretch" spacing={5} flex="1" display="flex" flexDirection="column">
               <Box className={`subscription-card-header subscription-card-header-${plan.title.toLowerCase()}`}>
                 <Heading as="h3" size="md">{plan.title}</Heading>
                 <Text>{plan.resolution}</Text>
               </Box>
               
-              <VStack align="stretch" spacing={4} p={6}>
+              <VStack align="stretch" spacing={4} p={6} flex="1" display="flex" flexDirection="column">
                 <HStack justify="space-between">
                   <Text>{plan.monthlyPrice}</Text>
                   <Text fontWeight="bold">{plan.price}</Text>
@@ -131,6 +133,10 @@ const SubscriptionPage: NextPage = () => {
                   <Text>{plan.devicesAtHomeValue}</Text>
                 </HStack>
                 <Divider />
+                
+                {/* Spacer will push the button to the bottom */}
+                <Spacer />
+
                 <Button
                   mt={4}
                   colorScheme="green"
