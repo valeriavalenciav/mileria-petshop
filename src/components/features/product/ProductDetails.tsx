@@ -9,7 +9,7 @@ import { FormatCurrency } from '@src/components/shared/format-currency';
 import { CartIcon } from '@src/components/shared/icons';
 import { QuantitySelector } from '@src/components/shared/quantity-selector';
 import { PageProductFieldsFragment } from '@src/lib/__generated/sdk';
-import { useCart } from '@src/context/CartProvider'; // Corrected the import path
+import { useCart } from '@src/context/CartProvider';
 
 export const ProductDetails = ({
   name,
@@ -22,19 +22,34 @@ export const ProductDetails = ({
   const theme = useTheme();
   const inspectorProps = useContentfulInspectorMode({ entryId });
   const { isOpen, onOpen, onClose } = useDisclosure();
-  const { addItem } = useCart();
+  const { addItem, updateItemQuantity, items } = useCart(); // Getting more functions and state from the cart
   const [quantity, setQuantity] = useState(1);
 
   const handleAddToCart = () => {
-    // The logic to add an item to the cart needs to be updated
-    // to match the new `addItem` function signature.
     if (name && price) {
-      // The new addItem takes an object with id, name, and price.
-      // It handles the quantity logic internally.
-      for (let i = 0; i < quantity; i++) {
-        addItem({ id: entryId, name, price });
+      const productToAdd = {
+        id: entryId,
+        name,
+        price,
+        image: featuredProductImage?.url || '', // Pass the image URL
+      };
+
+      // Check if the item is already in the cart
+      const existingItem = items.find(item => item.id === entryId);
+      
+      if (existingItem) {
+        // If it exists, update its quantity
+        updateItemQuantity(entryId, existingItem.quantity + quantity);
+      } else {
+        // If it's a new item, add it first
+        addItem(productToAdd);
+        // And if the desired quantity is more than 1, update it
+        if (quantity > 1) {
+          updateItemQuantity(entryId, quantity);
+        }
       }
-      onOpen();
+      
+      onOpen(); // Open the cart modal
     }
   };
 

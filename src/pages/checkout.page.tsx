@@ -1,14 +1,15 @@
 
 import { useState } from 'react';
-import { Container, Heading, Text, Button, VStack, HStack, Divider, Box, Spinner, Alert, AlertIcon } from '@chakra-ui/react';
+import { Container, Heading, Text, Button, VStack, HStack, Divider, Box, Spinner, Alert, AlertIcon, Image } from '@chakra-ui/react';
 import { GetServerSideProps, NextPage } from 'next';
 import Link from 'next/link';
 
 import { useCart } from '@src/context/CartProvider';
 import { getServerSideTranslations } from '@src/pages/utils/get-serverside-translations';
+import { FormatCurrency } from '@src/components/shared/format-currency';
 
 const CheckoutPage: NextPage = () => {
-  const { items, totalAmount, clearCart } = useCart();
+  const { items, totalAmount } = useCart();
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -16,26 +17,24 @@ const CheckoutPage: NextPage = () => {
     setIsLoading(true);
     setError(null);
 
-    // Map cart items to the format expected by our new API endpoint
     const apiItems = items.map(item => ({
       name: item.name,
-      amount: Math.round(item.price * 100), // Convert price to cents
+      amount: Math.round(item.price * 100),
       quantity: item.quantity,
+      // The image is for display only, so we don't need to send it to the payment API
     }));
 
     try {
       const res = await fetch('/api/create-payment-intent', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ items: apiItems }), // Send items array
+        body: JSON.stringify({ items: apiItems }),
       });
 
       const data = await res.json();
 
       if (data.url) {
-        // Redirect to Stripe's hosted checkout page
         window.location.href = data.url;
-        // The cart will be cleared upon successful payment via a webhook or on the payment status page in a real app
       } else {
         throw new Error(data.message || 'Failed to create checkout session.');
       }
@@ -47,34 +46,40 @@ const CheckoutPage: NextPage = () => {
   };
 
   return (
-    <Container mt={{ base: 6, lg: 16 }} maxW="container.md">
-      <Heading as="h1" mb={8}>Shopping Cart</Heading>
+    <Container mt={{ base: 6, lg: 16 }} maxW="container.lg">
+      <Heading as="h1" mb={8} textAlign="center">Review Your Order</Heading>
       
       {items.length === 0 ? (
         <Box textAlign="center">
             <Text>Your cart is empty.</Text>
-            <Link href="/products" passHref>
+            <Link href="/" passHref>
                 <Button as="a" mt={4} colorScheme="teal">Browse Products</Button>
             </Link>
         </Box>
       ) : (
-        <VStack spacing={6} align="stretch">
-            <VStack spacing={4} align="stretch" borderWidth="1px" borderRadius="md" p={4}>
+        <VStack spacing={8} align="stretch">
+            <VStack spacing={5} align="stretch" borderWidth="1px" borderRadius="md" p={{ base: 4, md: 6}}>
                 {items.map(item => (
-                    <HStack key={item.id} justify="space-between">
-                        <Text fontWeight="medium">{item.name} (x{item.quantity})</Text>
-                        <Text>${(item.price * item.quantity).toFixed(2)}</Text>
+                    <HStack key={item.id} justify="space-between" spacing={4}>
+                        {item.image && (
+                          <Image src={item.image} alt={item.name} boxSize={{ base: '60px', md: '80px' }} objectFit="cover" borderRadius="md" />
+                        )}
+                        <VStack align="start" flex={1}>
+                          <Text fontWeight="bold" noOfLines={2}>{item.name}</Text>
+                          <Text fontSize="sm" color="gray.600">Quantity: {item.quantity}</Text>
+                        </VStack>
+                        <Text fontWeight="medium"><FormatCurrency value={item.price * item.quantity} /></Text>
                     </HStack>
                 ))}
-                <Divider />
+                <Divider my={4} />
                 <HStack justify="space-between">
                     <Text fontSize="xl" fontWeight="bold">Total</Text>
-                    <Text fontSize="xl" fontWeight="bold">${totalAmount.toFixed(2)}</Text>
+                    <Text fontSize="xl" fontWeight="bold"><FormatCurrency value={totalAmount} /></Text>
                 </HStack>
             </VStack>
 
             {error && (
-                <Alert status="error">
+                <Alert status="error" borderRadius="md">
                     <AlertIcon />
                     {error}
                 </Alert>
@@ -87,7 +92,7 @@ const CheckoutPage: NextPage = () => {
                 w="full"
                 isLoading={isLoading}
                 spinner={<Spinner />} 
-                loadingText="Redirecting to payment..."
+                loadingText="Redirecting to secure payment..."
             >
                 Proceed to Secure Payment
             </Button>

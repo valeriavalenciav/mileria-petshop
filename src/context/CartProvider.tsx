@@ -1,14 +1,16 @@
 
 import React, { createContext, useContext, useState, useEffect } from 'react';
 
-// Define the shape of a cart item and the context
+// Define the shape of a cart item, now including an optional image property
 interface CartItem {
   id: string;
   name: string;
   price: number;
   quantity: number;
+  image?: string; // The image URL is optional
 }
 
+// The item passed to addItem will also include the optional image
 interface CartContextType {
   items: CartItem[];
   addItem: (item: Omit<CartItem, 'quantity'>) => void;
@@ -65,7 +67,8 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({ children
           item.id === itemToAdd.id ? { ...item, quantity: item.quantity + 1 } : item
         );
       }
-      // If item doesn't exist, add it to the cart with quantity 1
+      // If item doesn't exist, add it to the cart with quantity 1.
+      // The 'image' property from itemToAdd will be automatically included if present.
       return [...prevItems, { ...itemToAdd, quantity: 1 }];
     });
   };
