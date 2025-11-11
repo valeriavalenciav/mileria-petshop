@@ -18,7 +18,7 @@ import { useTranslation } from 'next-i18next';
 
 import ShoppingCart from '@src/components/features/shopping-cart/ShoppingCart';
 import { CartIcon, MenuIcon } from '@src/components/shared/icons';
-import { useCart } from '@src/context/CartProvider'; // Importar el hook del carrito
+import { useCart } from '@src/context/CartProvider';
 
 export const HEADER_HEIGHT = 60;
 
@@ -26,9 +26,8 @@ export const Header = (props: BoxProps) => {
   const { t } = useTranslation();
   const { isOpen, onOpen, onClose } = useDisclosure();
   const isMobile = useBreakpointValue({ base: true, md: false });
-  const { items } = useCart(); // Obtener los ítems del carrito
+  const { items } = useCart();
 
-  // Calcular la cantidad total de productos en el carrito
   const totalItems = items.reduce((total, item) => total + item.quantity, 0);
 
   const CartButton = () => (
@@ -40,7 +39,7 @@ export const Header = (props: BoxProps) => {
           position="absolute"
           top="-5px"
           right="-5px"
-          bg="blue.500"
+          bg="favorite"
           color="white"
           fontSize="xs"
           display="flex"
@@ -66,8 +65,7 @@ export const Header = (props: BoxProps) => {
         <MenuButton
           as={IconButton}
           aria-label="Options"
-          icon={<MenuIcon />}
-          variant="outline"
+          icon={<MenuIcon />}          variant="outline"
         />
         <MenuList>
           <MenuItem as={Link} href="/">
