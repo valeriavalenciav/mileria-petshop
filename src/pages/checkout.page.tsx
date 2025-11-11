@@ -1,64 +1,102 @@
 
-import { useState, useEffect } from 'react';
-import { Container, Heading, Text } from '@chakra-ui/react';
-import { GetServerSideProps, NextPage } from 'next'; // Changed to GetServerSideProps
-import { loadStripe, StripeElementsOptions } from '@stripe/stripe-js';
-import { Elements } from '@stripe/react-stripe-js';
+import { useState } from 'react';
+import { Container, Heading, Text, Button, VStack, HStack, Divider, Box, Spinner, Alert, AlertIcon } from '@chakra-ui/react';
+import { GetServerSideProps, NextPage } from 'next';
+import Link from 'next/link';
 
-import { useCart } from '@src/context/CartProvider'; // Corrected the import path
+import { useCart } from '@src/context/CartProvider';
 import { getServerSideTranslations } from '@src/pages/utils/get-serverside-translations';
-import { CheckoutForm } from '@src/components/features/checkout/CheckoutForm';
-
-const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY!);
 
 const CheckoutPage: NextPage = () => {
-  const [clientSecret, setClientSecret] = useState('');
-  const { items, totalAmount } = useCart(); // Now using the correct cart context
+  const { items, totalAmount, clearCart } = useCart();
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
-  useEffect(() => {
-    const amountInCents = Math.round(totalAmount * 100);
+  const handleCheckout = async () => {
+    setIsLoading(true);
+    setError(null);
 
-    if (amountInCents > 0) {
-      fetch('/api/create-payment-intent', {
+    // Map cart items to the format expected by our new API endpoint
+    const apiItems = items.map(item => ({
+      name: item.name,
+      amount: Math.round(item.price * 100), // Convert price to cents
+      quantity: item.quantity,
+    }));
+
+    try {
+      const res = await fetch('/api/create-payment-intent', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ amount: amountInCents }),
-      })
-        .then((res) => res.json())
-        .then((data) => {
-          if (data.clientSecret) {
-            setClientSecret(data.clientSecret);
-          }
-        });
+        body: JSON.stringify({ items: apiItems }), // Send items array
+      });
+
+      const data = await res.json();
+
+      if (data.url) {
+        // Redirect to Stripe's hosted checkout page
+        window.location.href = data.url;
+        // The cart will be cleared upon successful payment via a webhook or on the payment status page in a real app
+      } else {
+        throw new Error(data.message || 'Failed to create checkout session.');
+      }
+    } catch (err: any) {
+      console.error('Checkout error:', err);
+      setError(err.message || 'An unexpected error occurred. Please try again.');
+      setIsLoading(false);
     }
-    // If amount is 0, clientSecret remains empty and the form won't be shown.
-  }, [totalAmount]); // Depend on totalAmount from the global context
-
-  const appearance: StripeElementsOptions['appearance'] = {
-    theme: 'stripe',
-  };
-
-  const options: StripeElementsOptions = {
-    clientSecret,
-    appearance,
   };
 
   return (
-    <Container mt={{ base: 6, lg: 16 }}>
-      <Heading as="h1" mb={8}>Checkout</Heading>
+    <Container mt={{ base: 6, lg: 16 }} maxW="container.md">
+      <Heading as="h1" mb={8}>Shopping Cart</Heading>
       
-      {clientSecret && items.length > 0 ? (
-        <Elements options={options} stripe={stripePromise}>
-          <CheckoutForm />
-        </Elements>
+      {items.length === 0 ? (
+        <Box textAlign="center">
+            <Text>Your cart is empty.</Text>
+            <Link href="/products" passHref>
+                <Button as="a" mt={4} colorScheme="teal">Browse Products</Button>
+            </Link>
+        </Box>
       ) : (
-        <Text>Your cart is empty or the payment session is still loading.</Text>
+        <VStack spacing={6} align="stretch">
+            <VStack spacing={4} align="stretch" borderWidth="1px" borderRadius="md" p={4}>
+                {items.map(item => (
+                    <HStack key={item.id} justify="space-between">
+                        <Text fontWeight="medium">{item.name} (x{item.quantity})</Text>
+                        <Text>${(item.price * item.quantity).toFixed(2)}</Text>
+                    </HStack>
+                ))}
+                <Divider />
+                <HStack justify="space-between">
+                    <Text fontSize="xl" fontWeight="bold">Total</Text>
+                    <Text fontSize="xl" fontWeight="bold">${totalAmount.toFixed(2)}</Text>
+                </HStack>
+            </VStack>
+
+            {error && (
+                <Alert status="error">
+                    <AlertIcon />
+                    {error}
+                </Alert>
+            )}
+
+            <Button
+                onClick={handleCheckout}
+                colorScheme="green"
+                size="lg"
+                w="full"
+                isLoading={isLoading}
+                spinner={<Spinner />} 
+                loadingText="Redirecting to payment..."
+            >
+                Proceed to Secure Payment
+            </Button>
+        </VStack>
       )}
     </Container>
   );
 };
 
-// Changed from getStaticProps to getServerSideProps for dynamic pages
 export const getServerSideProps: GetServerSideProps = async ({ locale }) => {
   return {
     props: {
