@@ -1,14 +1,65 @@
-import { Box, Container, Heading, Text, Flex, VStack, HStack, Divider } from '@chakra-ui/react';
+
+import { Box, Button, Container, Heading, Text, Flex, VStack, HStack, Divider, Spinner } from '@chakra-ui/react';
 import { NextPage } from 'next';
 import { useTranslation } from 'next-i18next';
 import { useState } from 'react';
+import { loadStripe } from '@stripe/stripe-js';
 
 import { getServerSideTranslations } from './utils/get-serverside-translations';
+
+// Initialize Stripe.js with your publishable key.
+const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY!);
+
+// Replace with your actual Stripe Price IDs.
+const STRIPE_PRICE_IDS = {
+  Basic: 'price_1SS1uwJuAMA27hfRcFT6niD1',
+  Premium: 'price_1SS27MJuAMA27hfRNzzBzCPn',
+  Standard: 'price_1SS249JuAMA27hfRsUmfWjlg',
+};
 
 const SubscriptionPage: NextPage = () => {
   const { t } = useTranslation();
   const plans = t('subscription.plans', { returnObjects: true }) as any[];
   const [selectedPlan, setSelectedPlan] = useState('Premium');
+  const [isLoading, setIsLoading] = useState(false);
+
+  const handleSubscription = async (planTitle: string) => {
+    setIsLoading(true);
+
+    const priceId = STRIPE_PRICE_IDS[planTitle];
+    if (!priceId || priceId.includes('YOUR_')) {
+      console.error(`Stripe Price ID for plan "${planTitle}" is not configured.`);
+      alert('This subscription plan is not available at the moment. Please contact support.');
+      setIsLoading(false);
+      return;
+    }
+
+    try {
+      const res = await fetch('/api/create-subscription-checkout', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ priceId }),
+      });
+
+      if (!res.ok) {
+        throw new Error('Failed to create Stripe checkout session.');
+      }
+
+      const { url } = await res.json();
+
+      if (url) {
+        window.location.href = url;
+      } else {
+        throw new Error('Stripe session URL not found.');
+      }
+    } catch (error) {
+      console.error(error);
+      alert('An error occurred. Please try again.');
+      setIsLoading(false);
+    }
+  };
 
   return (
     <Container maxW="container.xl" py={10}>
@@ -19,7 +70,7 @@ const SubscriptionPage: NextPage = () => {
         {t('subscription.description')}
       </Text>
       <Flex direction={{ base: 'column', md: 'row' }} justify="center" align="stretch" gap={6}>
-        {plans.map((plan, index) => (
+        {plans.map((plan) => (
           <Box
             key={plan.title}
             className="subscription-card"
@@ -40,13 +91,12 @@ const SubscriptionPage: NextPage = () => {
               </Box>
             )}
             <VStack align="stretch" spacing={5}>
-              <Box 
-                className={`subscription-card-header subscription-card-header-${plan.title.toLowerCase()}`}>
+              <Box className={`subscription-card-header subscription-card-header-${plan.title.toLowerCase()}`}>
                 <Heading as="h3" size="md">{plan.title}</Heading>
                 <Text>{plan.resolution}</Text>
               </Box>
               
-              <VStack align="stretch" spacing={4}>
+              <VStack align="stretch" spacing={4} p={6}>
                 <HStack justify="space-between">
                   <Text>{plan.monthlyPrice}</Text>
                   <Text fontWeight="bold">{plan.price}</Text>
@@ -81,6 +131,14 @@ const SubscriptionPage: NextPage = () => {
                   <Text>{plan.devicesAtHomeValue}</Text>
                 </HStack>
                 <Divider />
+                <Button
+                  mt={4}
+                  colorScheme="green"
+                  onClick={() => handleSubscription(plan.title)}
+                  isDisabled={isLoading && selectedPlan === plan.title}
+                >
+                  {isLoading && selectedPlan === plan.title ? <Spinner /> : `Choose ${plan.title}`}
+                </Button>
               </VStack>
             </VStack>
           </Box>

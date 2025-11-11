@@ -46,7 +46,7 @@ const ShoppingCart = ({ isOpen, onClose }) => {
         <DrawerFooter>
           <Box w="full">
             {items.length > 0 && (
-              <Box mb={4}>_              
+              <Box mb={4}>             
                 <Flex justify="space-between" align="center" mb={2}>
                   <Text fontSize="xl" fontWeight="bold">
                     Total:
