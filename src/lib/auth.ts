@@ -18,15 +18,18 @@ interface LoginResponse {
  */
 export const login = async (credentials: LoginCredentials): Promise<LoginResponse> => {
   try {
-    // Usamos una ruta relativa aquí porque esta llamada se hace desde el navegador (cliente).
-    // Next.js se encargará de redirigir esta petición al backend gracias a la configuración
-    // de `rewrites` en `next.config.js`.
+    // Preparamos el cuerpo de la petición con el nombre de campo esperado por el backend: "correo".
+    const requestBody = {
+      correo: credentials.email,
+      password: credentials.password,
+    };
+
     const response = await fetch('/api/auth/login', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify(credentials),
+      body: JSON.stringify(requestBody), // Usamos el cuerpo corregido
     });
 
     if (!response.ok) {
