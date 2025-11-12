@@ -3,14 +3,14 @@ import { NextPage } from 'next';
 import { Container, Heading, Text, Box, Center, Link as ChakraLink } from '@chakra-ui/react';
 import NextLink from 'next/link';
 
+import { RegisterForm } from '@src/components/features/auth/RegisterForm';
 import { getServerSideTranslations } from './utils/get-serverside-translations';
-import { LoginForm } from '@src/components/features/auth/LoginForm';
 
-const LoginPage: NextPage = () => {
+const RegisterPage: NextPage = () => {
   return (
     <Container mt={{ base: 6, lg: 16 }} maxW="md">
         <Center mb={8}>
-            <Heading as="h1">Iniciar Sesión</Heading>
+            <Heading as="h1">Crear una cuenta</Heading>
         </Center>
 
         <Box 
@@ -20,14 +20,14 @@ const LoginPage: NextPage = () => {
             p={8}
             boxShadow="sm"
         >
-            <LoginForm />
+            <RegisterForm />
         </Box>
 
         <Center mt={6}>
             <Text>
-                ¿No tienes una cuenta?{' '}
-                <NextLink href="/register" passHref>
-                    <ChakraLink color="blue.500">Regístrate aquí</ChakraLink>
+                ¿Ya tienes una cuenta?{' '}
+                <NextLink href="/login" passHref>
+                    <ChakraLink color="blue.500">Inicia sesión aquí</ChakraLink>
                 </NextLink>
             </Text>
         </Center>
@@ -35,12 +35,10 @@ const LoginPage: NextPage = () => {
   );
 };
 
-export const getStaticProps = async ({ locale }: any) => {
-  return {
+export const getStaticProps = async ({ locale }: { locale?: string }) => ({
     props: {
       ...(await getServerSideTranslations(locale)),
     },
-  };
-};
+});
 
-export default LoginPage;
+export default RegisterPage;

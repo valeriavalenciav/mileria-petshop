@@ -1,43 +1,38 @@
 
-// La forma de los datos que los componentes necesitan para el login
+// --- INTERFACES COMUNES ---
+
+// La respuesta que los componentes esperan de las funciones de autenticación
+interface AuthResponse {
+  token: string;
+}
+
+// La forma de la respuesta REAL que la API del backend envía en caso de éxito
+interface ApiAuthSuccessResponse {
+  success: boolean;
+  message: string;
+  data: {
+    user: object;
+    token: string;
+  };
+}
+
+// --- LOGIN ---
+
+// Credenciales para el inicio de sesión
 interface LoginCredentials {
   email: string;
   password: string;
 }
 
-// La forma de la respuesta que el componente espera recibir de esta función
-interface LoginResponse {
-  token: string;
-}
-
-// La forma de la respuesta REAL que la API del backend envía
-interface ApiSuccessResponse {
-  success: boolean;
-  message: string;
-  data: {
-    user: object; // No necesitamos los detalles del usuario aquí
-    token: string;
-  };
-}
-
 /**
- * Llama a la API de backend, maneja la respuesta anidada y devuelve solo el token.
- * @param credentials - Un objeto con el email y la contraseña del usuario.
- * @returns Un objeto simple que contiene solo el token JWT.
+ * Llama a la API de login, maneja la respuesta anidada y devuelve solo el token.
  */
-export const login = async (credentials: LoginCredentials): Promise<LoginResponse> => {
+export const login = async (credentials: LoginCredentials): Promise<AuthResponse> => {
   try {
-    const requestBody = {
-      correo: credentials.email, // Corregido para que coincida con el backend
-      password: credentials.password,
-    };
-
     const response = await fetch('/api/auth/login', {
       method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(requestBody),
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ correo: credentials.email, password: credentials.password }),
     });
 
     if (!response.ok) {
@@ -45,22 +40,62 @@ export const login = async (credentials: LoginCredentials): Promise<LoginRespons
       throw new Error(errorData.message || `Error del servidor: ${response.status}`);
     }
 
-    const apiResponse: ApiSuccessResponse = await response.json();
+    const apiResponse: ApiAuthSuccessResponse = await response.json();
 
-    // Verificamos que la respuesta del backend tiene la estructura esperada
     if (apiResponse.data && apiResponse.data.token) {
-      // Extraemos el token anidado y lo devolvemos en la estructura simple que el componente espera
       return { token: apiResponse.data.token };
     } else {
-      // Si el backend responde 200 OK pero no envía el token, es un error inesperado.
       throw new Error('El servidor dio una respuesta exitosa pero no incluyó un token.');
+    }
+  } catch (error) {
+    console.error('Error en la función de login:', error);
+    if (error instanceof Error) throw error;
+    throw new Error('Ocurrió un error inesperado durante el inicio de sesión.');
+  }
+};
+
+
+// --- REGISTRO ---
+
+// Credenciales para el registro de un nuevo usuario
+export interface RegisterCredentials {
+    nombre: string;
+    correo: string;
+    password: string;
+    direccion: string;
+}
+
+/**
+ * Llama a la API de registro, maneja la respuesta anidada y devuelve el token.
+ */
+export const register = async (credentials: RegisterCredentials): Promise<AuthResponse> => {
+  try {
+    // El endpoint de registro, asumimos que es /api/auth/register
+    // Necesitaremos añadir un rewrite para esto en next.config.js
+    const response = await fetch('/api/auth/register', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(credentials),
+    });
+
+    if (!response.ok) {
+      const errorData = await response.json();
+      // El backend puede enviar errores en un array o como un solo mensaje
+      const message = Array.isArray(errorData.message) ? errorData.message.join(', ') : errorData.message;
+      throw new Error(message || `Error del servidor: ${response.status}`);
+    }
+
+    const apiResponse: ApiAuthSuccessResponse = await response.json();
+
+    if (apiResponse.data && apiResponse.data.token) {
+      return { token: apiResponse.data.token };
+    } else {
+      throw new Error('El servidor dio una respuesta de registro exitosa pero no incluyó un token.');
     }
 
   } catch (error) {
-    console.error('Error en la función de login:', error);
-    if (error instanceof Error) {
-        throw error;
-    }
-    throw new Error('Ocurrió un error inesperado durante el inicio de sesión.');
+    console.error('Error en la función de registro:', error);
+    if (error instanceof Error) throw error;
+    throw new Error('Ocurrió un error inesperado durante el registro.');
   }
 };
