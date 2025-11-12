@@ -53,6 +53,20 @@ module.exports = withPlugins(plugins, {
   headers,
 
   /**
+   * Rewrites allow you to map an incoming request path to a different
+   * destination path. They act as a URL proxy.
+   * documentation: https://nextjs.org/docs/api-reference/next.config.js/rewrites
+   */
+  async rewrites() {
+    return [
+      {
+        source: '/api/:path*',
+        destination: 'https://mileria-backend.vercel.app/api/:path*',
+      },
+    ];
+  },
+
+  /**
    * https://nextjs.org/docs/basic-features/image-optimization
    * Settings are the defaults
    */
