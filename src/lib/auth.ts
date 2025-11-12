@@ -1,26 +1,34 @@
 
-// Definimos la forma de los datos que necesitamos para el login
+// La forma de los datos que los componentes necesitan para el login
 interface LoginCredentials {
   email: string;
   password: string;
 }
 
-// Definimos la forma de la respuesta que esperamos del backend
+// La forma de la respuesta que el componente espera recibir de esta función
 interface LoginResponse {
   token: string;
-  // Puedes añadir más campos si tu backend los devuelve, como el nombre de usuario, etc.
+}
+
+// La forma de la respuesta REAL que la API del backend envía
+interface ApiSuccessResponse {
+  success: boolean;
+  message: string;
+  data: {
+    user: object; // No necesitamos los detalles del usuario aquí
+    token: string;
+  };
 }
 
 /**
- * Llama a la API de backend para autenticar al usuario.
+ * Llama a la API de backend, maneja la respuesta anidada y devuelve solo el token.
  * @param credentials - Un objeto con el email y la contraseña del usuario.
- * @returns La respuesta del servidor, que debería incluir un token JWT.
+ * @returns Un objeto simple que contiene solo el token JWT.
  */
 export const login = async (credentials: LoginCredentials): Promise<LoginResponse> => {
   try {
-    // Preparamos el cuerpo de la petición con el nombre de campo esperado por el backend: "correo".
     const requestBody = {
-      correo: credentials.email,
+      correo: credentials.email, // Corregido para que coincida con el backend
       password: credentials.password,
     };
 
@@ -29,22 +37,27 @@ export const login = async (credentials: LoginCredentials): Promise<LoginRespons
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify(requestBody), // Usamos el cuerpo corregido
+      body: JSON.stringify(requestBody),
     });
 
     if (!response.ok) {
-      // Si la respuesta no es 2xx, intentamos leer el mensaje de error del backend
       const errorData = await response.json();
       throw new Error(errorData.message || `Error del servidor: ${response.status}`);
     }
 
-    const data: LoginResponse = await response.json();
-    return data;
+    const apiResponse: ApiSuccessResponse = await response.json();
+
+    // Verificamos que la respuesta del backend tiene la estructura esperada
+    if (apiResponse.data && apiResponse.data.token) {
+      // Extraemos el token anidado y lo devolvemos en la estructura simple que el componente espera
+      return { token: apiResponse.data.token };
+    } else {
+      // Si el backend responde 200 OK pero no envía el token, es un error inesperado.
+      throw new Error('El servidor dio una respuesta exitosa pero no incluyó un token.');
+    }
 
   } catch (error) {
     console.error('Error en la función de login:', error);
-    // Re-lanzamos el error para que el componente que llama pueda manejarlo.
-    // Esto es importante para mostrar mensajes de error al usuario.
     if (error instanceof Error) {
         throw error;
     }
