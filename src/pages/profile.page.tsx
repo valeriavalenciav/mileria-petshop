@@ -1,5 +1,5 @@
 
-import { Avatar, Container, Heading, HStack, VStack, Text, SimpleGrid } from '@chakra-ui/react';
+import { Avatar, Container, Heading, HStack, VStack, Text, SimpleGrid, Box } from '@chakra-ui/react';
 import { GetServerSideProps, NextPage } from 'next';
 import nookies from 'nookies';
 
@@ -9,10 +9,19 @@ import { PageProductFieldsFragment } from '@src/lib/__generated/sdk';
 import { client } from '@src/lib/client';
 import { getFavorites } from '@src/lib/favorites';
 
+// 1. Interfaz actualizada para coincidir con la respuesta de la API
 interface UserProfile {
   id: string;
-  name: string;
-  email: string;
+  nombre: string;
+  correo: string;
+  direccion: string;
+  rol: string;
+}
+
+// Interfaz para la respuesta completa de la API de perfil
+interface ProfileApiResponse {
+  success: boolean;
+  data: UserProfile;
 }
 
 interface ProfilePageProps {
@@ -21,30 +30,42 @@ interface ProfilePageProps {
 }
 
 const ProfilePage: NextPage<ProfilePageProps> = ({ user, favoriteProducts }) => {
-  const photoURL = `https://api.dicebear.com/9.x/adventurer-neutral/svg?seed=${user.name}&backgroundColor=b6e3f4,c0aede,d1d4f9,ffdfbf,ffd5dc`;
+  // Usamos el nombre para generar un avatar único y consistente
+  const photoURL = `https://api.dicebear.com/9.x/adventurer-neutral/svg?seed=${user.nombre}&backgroundColor=b6e3f4,c0aede,d1d4f9,ffdfbf,ffd5dc`;
 
   return (
-    <Container mt={{ base: 6, lg: 16 }}>
-      <Heading as="h1" mb={8}>User Profile</Heading>
-      <HStack spacing={8} alignItems="center">
-        <Avatar size="xl" name={user.name} src={photoURL} />
+    <Container mt={{ base: 6, lg: 16 }} maxW="container.lg">
+      <Heading as="h1" mb={8}>Perfil de Usuario</Heading>
+      <HStack spacing={8} alignItems="flex-start">
+        <Avatar size="xl" name={user.nombre} src={photoURL} />
+        {/* 3. Componente actualizado para mostrar toda la información */}
         <VStack
           align="left"
           borderWidth="1px"
           borderColor="gray.200"
           borderRadius="md"
-          p={4}
+          p={6}
+          spacing={3}
+          flex={1}
         >
-          <Text><strong>Name:</strong> {user.name}</Text>
-          <Text><strong>Email:</strong> {user.email}</Text>
+          <Text><strong>Nombre:</strong> {user.nombre}</Text>
+          <Text><strong>Correo:</strong> {user.correo}</Text>
+          <Text><strong>Dirección:</strong> {user.direccion}</Text>
+          <Text><strong>Rol:</strong> {user.rol}</Text>
         </VStack>
       </HStack>
-      <Heading as="h2" size="lg" mt={12} mb={8}>Your Favorite Products</Heading>
-      <SimpleGrid columns={{ base: 1, md: 2, lg: 3 }} spacing={10}>
-        {favoriteProducts.map(
-          product => product && <ProductCard key={product.sys.id} product={product} />,
+      <Box mt={12}>
+        <Heading as="h2" size="lg" mb={8}>Tus Productos Favoritos</Heading>
+        {favoriteProducts.length > 0 ? (
+            <SimpleGrid columns={{ base: 1, md: 2, lg: 3 }} spacing={10}>
+                {favoriteProducts.map(
+                    product => product && <ProductCard key={product.sys.id} product={product} />,
+                )}
+            </SimpleGrid>
+        ) : (
+            <Text>No tienes productos guardados en favoritos todavía.</Text>
         )}
-      </SimpleGrid>
+      </Box>
     </Container>
   );
 };
@@ -54,29 +75,29 @@ export const getServerSideProps: GetServerSideProps<ProfilePageProps> = async (c
   const token = cookies.token;
 
   if (!token) {
-    return {
-      redirect: {
-        destination: '/login',
-        permanent: false,
-      },
-    };
+    return { redirect: { destination: '/login', permanent: false } };
   }
 
   try {
     const profileResponse = await fetch('https://mileria-backend.vercel.app/api/auth/profile', {
       method: 'GET',
-      headers: {
-        'Authorization': `Bearer ${token}`,
-      },
+      headers: { 'Authorization': `Bearer ${token}` },
     });
 
     if (!profileResponse.ok) {
-      throw new Error('Token inválido o expirado');
+      throw new Error('Token inválido o expirado, no se pudo obtener el perfil.');
     }
 
-    const userData: UserProfile = await profileResponse.json();
+    // 2. Procesamos la respuesta anidada de la API
+    const apiResponse: ProfileApiResponse = await profileResponse.json();
+    const userData = apiResponse.data; // Extraemos el objeto de usuario
 
-    const favoriteProductIds = getFavorites(userData.email);
+    if (!userData) {
+        throw new Error('La respuesta de la API no contiene datos del usuario.');
+    }
+
+    // Usamos 'correo' para obtener los favoritos
+    const favoriteProductIds = getFavorites(userData.correo);
     const favoriteProductsData = await client.pageProductCollection({
       where: { productId_in: favoriteProductIds.map(Number) },
       locale: ctx.locale,
@@ -91,13 +112,10 @@ export const getServerSideProps: GetServerSideProps<ProfilePageProps> = async (c
     };
 
   } catch (error) {
-    nookies.destroy(ctx, 'token');
-    return {
-      redirect: {
-        destination: '/login',
-        permanent: false,
-      },
-    };
+    console.error("Error en getServerSideProps de perfil:", error);
+    // Si algo falla (token inválido, API caída, etc.), destruimos la cookie y redirigimos
+    nookies.destroy(ctx, 'token', { path: '/' });
+    return { redirect: { destination: '/login', permanent: false } };
   }
 };
 
