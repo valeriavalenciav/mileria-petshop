@@ -54,22 +54,21 @@ export const LoginForm = () => {
   };
 
   return (
-    <Box as="form" onSubmit={handleSubmit(onSubmit)} width="100%" maxWidth="400px">
-      <VStack spacing={6} align="stretch">
+    <Box as="form" onSubmit={handleSubmit(onSubmit)} width="100%">
+      <VStack spacing={6} align="center">
 
         {error && (
-          <Alert status="error">
+          <Alert status="error" width="90%">
             <AlertIcon />
             {error}
           </Alert>
         )}
 
-        <FormControl isInvalid={!!errors.email}>
-          <FormLabel htmlFor="email" textAlign="center">Email</FormLabel>
+        <FormControl isInvalid={!!errors.email} width="90%">
+          <FormLabel htmlFor="email">Email</FormLabel>
           <Input
             id="email"
             type="email"
-            textAlign="center"
             {...register('email', {
               required: 'El email es obligatorio',
               pattern: {
@@ -78,15 +77,14 @@ export const LoginForm = () => {
               },
             })}
           />
-          {errors.email && <Box color="red.500" mt={2} textAlign="center">{errors.email.message}</Box>}
+          {errors.email && <Box color="red.500" mt={2}>{errors.email.message}</Box>}
         </FormControl>
 
-        <FormControl isInvalid={!!errors.password}>
-          <FormLabel htmlFor="password" textAlign="center">Contraseña</FormLabel>
+        <FormControl isInvalid={!!errors.password} width="90%">
+          <FormLabel htmlFor="password">Contraseña</FormLabel>
           <Input
             id="password"
             type="password"
-            textAlign="center"
             {...register('password', {
               required: 'La contraseña es obligatoria',
               minLength: {
@@ -95,7 +93,7 @@ export const LoginForm = () => {
               },
             })}
           />
-          {errors.password && <Box color="red.500" mt={2} textAlign="center">{errors.password.message}</Box>}
+          {errors.password && <Box color="red.500" mt={2}>{errors.password.message}</Box>}
         </FormControl>
 
         <Button
@@ -103,7 +101,7 @@ export const LoginForm = () => {
           colorScheme="blue"
           isLoading={isLoading}
           loadingText="Iniciando..."
-          width="full"
+          width="90%"
         >
           Entrar
         </Button>
