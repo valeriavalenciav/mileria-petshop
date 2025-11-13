@@ -5,7 +5,6 @@ import {
   FormLabel,
   Input,
   VStack,
-  Heading,
   Box,
   Alert,
   AlertIcon,
@@ -57,9 +56,6 @@ export const LoginForm = () => {
   return (
     <Box as="form" onSubmit={handleSubmit(onSubmit)} width="100%" maxWidth="400px">
       <VStack spacing={6} align="stretch">
-        <Heading as="h2" size="lg" textAlign="center">
-          Iniciar Sesión
-        </Heading>
 
         {error && (
           <Alert status="error">
