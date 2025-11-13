@@ -34,11 +34,11 @@ const ProfilePage: NextPage<ProfilePageProps> = ({ user, favoriteProducts }) => 
 
   return (
     <Container mt={{ base: 6, lg: 16 }} maxW="container.lg">
-      <Heading as="h1" mb={8} textAlign="center">Perfil de Usuario</Heading>
+      <Heading as="h1" mb={8} textAlign={{ base: 'center', lg: 'left' }}>Perfil de Usuario</Heading>
       <Flex
         direction={{ base: 'column', lg: 'row' }}
         align="center"
-        justify="center"
+        justify={{ base: 'center', lg: 'flex-start' }}
         gap={{ base: 6, lg: 8 }}
       >
         <Avatar size="xl" name={user.nombre} src={photoURL} />
