@@ -36,6 +36,7 @@
     "@contentful/live-preview": "4.6.48",
     "@emotion/react": "11.14.0",
     "@emotion/styled": "11.14.1",
+    "@hookform/resolvers": "^5.2.2",
     "@next/bundle-analyzer": "13.5.11",
     "@next/font": "13.5.11",
     "@stripe/react-stripe-js": "^5.3.0",
