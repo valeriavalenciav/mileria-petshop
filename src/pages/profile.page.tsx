@@ -1,5 +1,5 @@
 
-import { Avatar, Container, Heading, HStack, VStack, Text, SimpleGrid, Box } from '@chakra-ui/react';
+import { Avatar, Container, Heading, HStack, VStack, Text, SimpleGrid, Box, Divider } from '@chakra-ui/react';
 import { GetServerSideProps, NextPage } from 'next';
 import nookies from 'nookies';
 
@@ -8,6 +8,7 @@ import { ProductCard } from '@src/components/features/product/ProductCard';
 import { PageProductFieldsFragment } from '@src/lib/__generated/sdk';
 import { client } from '@src/lib/client';
 import { getFavorites } from '@src/lib/favorites';
+import { LogoutButton } from '@src/components/features/auth/LogoutButton';
 
 // 1. Interfaz actualizada para coincidir con la respuesta de la API
 interface UserProfile {
@@ -40,18 +41,22 @@ const ProfilePage: NextPage<ProfilePageProps> = ({ user, favoriteProducts }) => 
         <Avatar size="xl" name={user.nombre} src={photoURL} />
         {/* 3. Componente actualizado para mostrar toda la información */}
         <VStack
-          align="left"
+          align="stretch" // Changed to stretch to allow full-width button
           borderWidth="1px"
           borderColor="gray.200"
           borderRadius="md"
           p={6}
-          spacing={3}
+          spacing={4} // Adjusted spacing
           flex={1}
         >
           <Text><strong>Nombre:</strong> {user.nombre}</Text>
           <Text><strong>Correo:</strong> {user.correo}</Text>
           <Text><strong>Dirección:</strong> {user.direccion}</Text>
           <Text><strong>Rol:</strong> {user.rol}</Text>
+          
+          <Divider my={2} />
+
+          <LogoutButton />
         </VStack>
       </HStack>
       <Box mt={12}>
