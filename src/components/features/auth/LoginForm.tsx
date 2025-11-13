@@ -1,4 +1,3 @@
-
 import {
   Button,
   FormControl,
@@ -47,7 +46,11 @@ export const LoginForm = () => {
         setError('Respuesta inesperada del servidor.');
       }
     } catch (err: any) {
-      setError(err.message || 'Ocurrió un error al iniciar sesión.');
+      if (err.message && err.message.includes('401')) {
+        setError('Credenciales inválidas. Por favor, verifica tu email y contraseña.');
+      } else {
+        setError(err.message || 'Ocurrió un error al iniciar sesión.');
+      }
     }
 
     setIsLoading(false);
