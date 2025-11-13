@@ -68,31 +68,31 @@ export const RegisterForm = () => {
   return (
     <Box as="form" onSubmit={handleSubmit(onSubmit)} width="100%">
       <VStack spacing={6} align="center">
-        <FormControl isInvalid={!!errors.nombre} width="50%">
+        <FormControl isInvalid={!!errors.nombre} width={{ base: '80%', md: '50%' }}>
           <FormLabel htmlFor="nombre">Nombre</FormLabel>
           <Input id="nombre" type="text" {...formRegister('nombre')} />
           <FormErrorMessage>{errors.nombre?.message}</FormErrorMessage>
         </FormControl>
 
-        <FormControl isInvalid={!!errors.correo} width="50%">
-          <FormLabel htmlFor="correo">Correo electrónico</FormLabel>
-          <Input id="correo" type="email" {...formRegister('correo')} />
-          <FormErrorMessage>{errors.correo?.message}</FormErrorMessage>
-        </FormControl>
-
-        <FormControl isInvalid={!!errors.password} width="50%">
-          <FormLabel htmlFor="password">Contraseña</FormLabel>
-          <Input id="password" type="password" {...formRegister('password')} />
-          <FormErrorMessage>{errors.password?.message}</FormErrorMessage>
-        </FormControl>
-
-        <FormControl isInvalid={!!errors.direccion} width="50%">
+        <FormControl isInvalid={!!errors.direccion} width={{ base: '80%', md: '50%' }}>
           <FormLabel htmlFor="direccion">Dirección</FormLabel>
           <Input id="direccion" type="text" {...formRegister('direccion')} />
           <FormErrorMessage>{errors.direccion?.message}</FormErrorMessage>
         </FormControl>
 
-        <Button colorScheme="blue" isLoading={isSubmitting} type="submit" width="50%">
+        <FormControl isInvalid={!!errors.correo} width={{ base: '80%', md: '50%' }}>
+          <FormLabel htmlFor="correo">Correo electrónico</FormLabel>
+          <Input id="correo" type="email" {...formRegister('correo')} />
+          <FormErrorMessage>{errors.correo?.message}</FormErrorMessage>
+        </FormControl>
+
+        <FormControl isInvalid={!!errors.password} width={{ base: '80%', md: '50%' }}>
+          <FormLabel htmlFor="password">Contraseña</FormLabel>
+          <Input id="password" type="password" {...formRegister('password')} />
+          <FormErrorMessage>{errors.password?.message}</FormErrorMessage>
+        </FormControl>
+
+        <Button colorScheme="blue" isLoading={isSubmitting} type="submit" width={{ base: '80%', md: '50%' }}>
           Crear cuenta
         </Button>
       </VStack>

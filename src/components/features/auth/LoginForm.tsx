@@ -58,13 +58,13 @@ export const LoginForm = () => {
       <VStack spacing={6} align="center">
 
         {error && (
-          <Alert status="error" width="50%">
+          <Alert status="error" width={{ base: '80%', md: '50%' }}>
             <AlertIcon />
             {error}
           </Alert>
         )}
 
-        <FormControl isInvalid={!!errors.email} width="50%">
+        <FormControl isInvalid={!!errors.email} width={{ base: '80%', md: '50%' }}>
           <FormLabel htmlFor="email">Email</FormLabel>
           <Input
             id="email"
@@ -80,7 +80,7 @@ export const LoginForm = () => {
           {errors.email && <Box color="red.500" mt={2}>{errors.email.message}</Box>}
         </FormControl>
 
-        <FormControl isInvalid={!!errors.password} width="50%">
+        <FormControl isInvalid={!!errors.password} width={{ base: '80%', md: '50%' }}>
           <FormLabel htmlFor="password">Contraseña</FormLabel>
           <Input
             id="password"
@@ -101,7 +101,7 @@ export const LoginForm = () => {
           colorScheme="blue"
           isLoading={isLoading}
           loadingText="Iniciando..."
-          width="50%"
+          width={{ base: '80%', md: '50%' }}
         >
           Entrar
         </Button>
