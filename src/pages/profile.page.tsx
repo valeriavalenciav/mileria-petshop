@@ -1,7 +1,13 @@
-
-import { Avatar, Container, Heading, Flex, VStack, Text, SimpleGrid, Box, Divider } from '@chakra-ui/react';
+import {
+  Avatar, Container, Heading, Flex, VStack, Text, SimpleGrid, Box, Divider,
+  AlertDialog, AlertDialogBody, AlertDialogFooter, AlertDialogHeader,
+  AlertDialogContent, AlertDialogOverlay, useDisclosure, Button, useToast
+} from '@chakra-ui/react';
 import { GetServerSideProps, NextPage } from 'next';
 import nookies from 'nookies';
+import { useRef, useState } from 'react';
+import { useRouter } from 'next/router';
+import Cookies from 'js-cookie';
 
 import { getServerSideTranslations } from './utils/get-serverside-translations';
 import { ProductCard } from '@src/components/features/product/ProductCard';
@@ -10,11 +16,12 @@ import { client } from '@src/lib/client';
 import { getFavorites } from '@src/lib/favorites';
 import { LogoutButton } from '@src/components/features/auth/LogoutButton';
 
+// ... (interfaces remain the same)
 interface UserProfile {
   id: string;
   nombre: string;
   correo: string;
-  direccion: string;
+  direccion:string;
   rol: string;
 }
 
@@ -28,9 +35,76 @@ interface ProfilePageProps {
   favoriteProducts: (PageProductFieldsFragment | null)[];
 }
 
-
 const ProfilePage: NextPage<ProfilePageProps> = ({ user, favoriteProducts }) => {
   const photoURL = `https://api.dicebear.com/9.x/adventurer-neutral/svg?seed=${user.nombre}&backgroundColor=b6e3f4,c0aede,d1d4f9,ffdfbf,ffd5dc`;
+
+  // Hooks for the delete account functionality
+  const { isOpen, onOpen, onClose } = useDisclosure();
+  const cancelRef = useRef(null);
+  const router = useRouter();
+  const toast = useToast();
+  const [isLoading, setIsLoading] = useState(false);
+
+  // Function to handle the account deletion
+  const handleDeleteAccount = async () => {
+    setIsLoading(true);
+    const token = Cookies.get('token');
+
+    if (!token) {
+      setIsLoading(false);
+      toast({
+        title: "Error de autenticación",
+        description: "No se encontró tu sesión. Por favor, inicia sesión de nuevo.",
+        status: "error",
+        duration: 5000,
+        isClosable: true,
+      });
+      onClose();
+      router.push('/login');
+      return;
+    }
+
+    try {
+      const response = await fetch('https://mileria-backend.vercel.app/api/users/delete/me', {
+        method: 'DELETE',
+        headers: {
+          'Authorization': `Bearer ${token}`,
+        },
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json().catch(() => ({ message: 'No se pudo procesar la respuesta del servidor.' }));
+        throw new Error(errorData.message || 'Ocurrió un error inesperado.');
+      }
+      
+      // Log out user on success
+      Cookies.remove('token', { path: '/' });
+      localStorage.removeItem('token');
+      
+      toast({
+        title: "Cuenta eliminada",
+        description: "Tu cuenta ha sido eliminada permanentemente.",
+        status: "success",
+        duration: 6000,
+        isClosable: true,
+      });
+
+      // Redirect to login page after a short delay
+      setTimeout(() => router.push('/login'), 1000);
+
+    } catch (error: any) {
+      toast({
+        title: "Error al eliminar la cuenta",
+        description: error.message,
+        status: "error",
+        duration: 9000,
+        isClosable: true,
+      });
+    } finally {
+      setIsLoading(false);
+      onClose();
+    }
+  };
 
   return (
     <Container mt={{ base: 6, lg: 16 }} maxW="container.lg">
@@ -59,6 +133,19 @@ const ProfilePage: NextPage<ProfilePageProps> = ({ user, favoriteProducts }) => 
           <Divider my={2} />
 
           <LogoutButton />
+
+          <Divider my={2} />
+
+          <Text
+            color="red.500"
+            onClick={onOpen}
+            cursor="pointer"
+            fontWeight="medium"
+            textAlign="center"
+            _hover={{ textDecoration: 'underline' }}
+          >
+            Eliminar mi cuenta
+          </Text>
         </VStack>
       </Flex>
       <Box mt={12}>
@@ -66,13 +153,49 @@ const ProfilePage: NextPage<ProfilePageProps> = ({ user, favoriteProducts }) => 
         {favoriteProducts.length > 0 ? (
             <SimpleGrid columns={{ base: 1, md: 2, lg: 3 }} spacing={10}>
                 {favoriteProducts.map(
-                    product => product && <ProductCard key={product.sys.id} product={product} />,
+                    product => product && <ProductCard key={product.sys.id} product={product} />
                 )}
             </SimpleGrid>
         ) : (
             <Text>No tienes productos guardados en favoritos todavía.</Text>
         )}
       </Box>
+
+      {/* Delete Account Confirmation Dialog */}
+      <AlertDialog
+        isOpen={isOpen}
+        leastDestructiveRef={cancelRef}
+        onClose={onClose}
+        isCentered
+      >
+        <AlertDialogOverlay>
+          <AlertDialogContent>
+            <AlertDialogHeader fontSize="lg" fontWeight="bold">
+              Eliminar Cuenta Permanentemente
+            </AlertDialogHeader>
+
+            <AlertDialogBody>
+              ¿Estás completamente seguro? Esta acción es irreversible. Todos tus datos, incluyendo
+              tu perfil y productos favoritos, serán eliminados para siempre.
+            </AlertDialogBody>
+
+            <AlertDialogFooter>
+              <Button ref={cancelRef} onClick={onClose} isDisabled={isLoading}>
+                Cancelar
+              </Button>
+              <Button
+                colorScheme="red"
+                onClick={handleDeleteAccount}
+                ml={3}
+                isLoading={isLoading}
+                loadingText="Eliminando..."
+              >
+                Sí, Eliminar Mi Cuenta
+              </Button>
+            </AlertDialogFooter>
+          </AlertDialogContent>
+        </AlertDialogOverlay>
+      </AlertDialog>
     </Container>
   );
 };
