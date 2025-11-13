@@ -7,16 +7,16 @@ import {
   Input,
   Button,
   VStack,
-  useToast, // Usaremos toasts para notificaciones
+  useToast,
+  Box,
 } from '@chakra-ui/react';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
 import { useRouter } from 'next/router';
 import nookies from 'nookies';
 
-import { register } from '@src/lib/auth'; // Importaremos una nueva función 'register'
+import { register } from '@src/lib/auth';
 
-// Definimos el esquema de validación para el formulario de registro
 const schema = z.object({
   nombre: z.string().min(1, 'El nombre es requerido'),
   correo: z.string().email('El correo electrónico no es válido'),
@@ -24,7 +24,6 @@ const schema = z.object({
   direccion: z.string().min(1, 'La dirección es requerida'),
 });
 
-// Los tipos de datos del formulario se infieren del esquema
 type RegisterFormData = z.infer<typeof schema>;
 
 export const RegisterForm = () => {
@@ -32,7 +31,7 @@ export const RegisterForm = () => {
   const toast = useToast();
   const {
     handleSubmit,
-    register: formRegister, // Renombramos 'register' para evitar conflicto con la función de auth
+    register: formRegister,
     formState: { errors, isSubmitting },
   } = useForm<RegisterFormData>({
     resolver: zodResolver(schema),
@@ -40,11 +39,10 @@ export const RegisterForm = () => {
 
   const onSubmit = async (data: RegisterFormData) => {
     try {
-      const response = await register(data); // Llamamos a la función de registro
+      const response = await register(data);
 
       if (response.token) {
-        // Si el registro es exitoso y obtenemos un token...
-        nookies.set(null, 'token', response.token, { path: '/' }); // ...guardamos el token en las cookies
+        nookies.set(null, 'token', response.token, { path: '/' });
         toast({
           title: '¡Registro exitoso!',
           description: 'Hemos creado tu cuenta y te hemos redirigido a tu perfil.',
@@ -52,13 +50,11 @@ export const RegisterForm = () => {
           duration: 5000,
           isClosable: true,
         });
-        router.push('/profile'); // ...y redirigimos al perfil
+        router.push('/profile');
       } else {
-        // Caso improbable si la API responde 200 pero sin token
         throw new Error('Respuesta inesperada del servidor.');
       }
     } catch (error: any) {
-      // Si hay un error, lo mostramos en un toast
       toast({
         title: 'Error en el registro',
         description: error.message || 'Ocurrió un problema al intentar crear tu cuenta.',
@@ -70,36 +66,36 @@ export const RegisterForm = () => {
   };
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)}>
-      <VStack spacing={4}>
-        <FormControl isInvalid={!!errors.nombre}>
+    <Box as="form" onSubmit={handleSubmit(onSubmit)} width="100%">
+      <VStack spacing={6} align="center">
+        <FormControl isInvalid={!!errors.nombre} width="50%">
           <FormLabel htmlFor="nombre">Nombre</FormLabel>
           <Input id="nombre" type="text" {...formRegister('nombre')} />
           <FormErrorMessage>{errors.nombre?.message}</FormErrorMessage>
         </FormControl>
 
-        <FormControl isInvalid={!!errors.correo}>
+        <FormControl isInvalid={!!errors.correo} width="50%">
           <FormLabel htmlFor="correo">Correo electrónico</FormLabel>
           <Input id="correo" type="email" {...formRegister('correo')} />
           <FormErrorMessage>{errors.correo?.message}</FormErrorMessage>
         </FormControl>
 
-        <FormControl isInvalid={!!errors.password}>
+        <FormControl isInvalid={!!errors.password} width="50%">
           <FormLabel htmlFor="password">Contraseña</FormLabel>
           <Input id="password" type="password" {...formRegister('password')} />
           <FormErrorMessage>{errors.password?.message}</FormErrorMessage>
         </FormControl>
 
-        <FormControl isInvalid={!!errors.direccion}>
+        <FormControl isInvalid={!!errors.direccion} width="50%">
           <FormLabel htmlFor="direccion">Dirección</FormLabel>
           <Input id="direccion" type="text" {...formRegister('direccion')} />
           <FormErrorMessage>{errors.direccion?.message}</FormErrorMessage>
         </FormControl>
 
-        <Button mt={4} colorScheme="blue" isLoading={isSubmitting} type="submit" width="full">
+        <Button colorScheme="blue" isLoading={isSubmitting} type="submit" width="50%">
           Crear cuenta
         </Button>
       </VStack>
-    </form>
+    </Box>
   );
 };
