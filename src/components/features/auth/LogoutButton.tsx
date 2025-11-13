@@ -1,5 +1,5 @@
 
-import { Button } from '@chakra-ui/react';
+import { Text } from '@chakra-ui/react';
 import { useRouter } from 'next/router';
 import Cookies from 'js-cookie';
 
@@ -16,17 +16,16 @@ export const LogoutButton = () => {
   };
 
   return (
-    <Button
-      colorScheme="red" // This will be overridden but is good for semantics
-      backgroundColor="favorite"
-      color="white"
-      width="full"
+    <Text
+      color="favorite"
       onClick={handleLogout}
+      cursor="pointer"
+      fontWeight="medium"
       _hover={{
-        backgroundColor: 'red.600' // A slightly darker red for hover
+        textDecoration: 'underline',
       }}
     >
       Cerrar Sesión
-    </Button>
+    </Text>
   );
 };

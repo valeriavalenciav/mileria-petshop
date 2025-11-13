@@ -1,5 +1,5 @@
 
-import { Avatar, Container, Heading, HStack, VStack, Text, SimpleGrid, Box, Divider } from '@chakra-ui/react';
+import { Avatar, Container, Heading, Flex, VStack, Text, SimpleGrid, Box, Divider } from '@chakra-ui/react';
 import { GetServerSideProps, NextPage } from 'next';
 import nookies from 'nookies';
 
@@ -10,7 +10,6 @@ import { client } from '@src/lib/client';
 import { getFavorites } from '@src/lib/favorites';
 import { LogoutButton } from '@src/components/features/auth/LogoutButton';
 
-// 1. Interfaz actualizada para coincidir con la respuesta de la API
 interface UserProfile {
   id: string;
   nombre: string;
@@ -19,7 +18,6 @@ interface UserProfile {
   rol: string;
 }
 
-// Interfaz para la respuesta completa de la API de perfil
 interface ProfileApiResponse {
   success: boolean;
   data: UserProfile;
@@ -30,24 +28,28 @@ interface ProfilePageProps {
   favoriteProducts: (PageProductFieldsFragment | null)[];
 }
 
+
 const ProfilePage: NextPage<ProfilePageProps> = ({ user, favoriteProducts }) => {
-  // Usamos el nombre para generar un avatar único y consistente
   const photoURL = `https://api.dicebear.com/9.x/adventurer-neutral/svg?seed=${user.nombre}&backgroundColor=b6e3f4,c0aede,d1d4f9,ffdfbf,ffd5dc`;
 
   return (
     <Container mt={{ base: 6, lg: 16 }} maxW="container.lg">
-      <Heading as="h1" mb={8}>Perfil de Usuario</Heading>
-      <HStack spacing={8} alignItems="flex-start">
+      <Heading as="h1" mb={8} textAlign="center">Perfil de Usuario</Heading>
+      <Flex
+        direction={{ base: 'column', lg: 'row' }}
+        align="center"
+        justify="center"
+        gap={{ base: 6, lg: 8 }}
+      >
         <Avatar size="xl" name={user.nombre} src={photoURL} />
-        {/* 3. Componente actualizado para mostrar toda la información */}
         <VStack
-          align="stretch" // Changed to stretch to allow full-width button
+          align="stretch"
           borderWidth="1px"
           borderColor="gray.200"
           borderRadius="md"
           p={6}
-          spacing={4} // Adjusted spacing
-          flex={1}
+          spacing={4}
+          width={{ base: 'full', md: 'md' }}
         >
           <Text><strong>Nombre:</strong> {user.nombre}</Text>
           <Text><strong>Correo:</strong> {user.correo}</Text>
@@ -58,7 +60,7 @@ const ProfilePage: NextPage<ProfilePageProps> = ({ user, favoriteProducts }) => 
 
           <LogoutButton />
         </VStack>
-      </HStack>
+      </Flex>
       <Box mt={12}>
         <Heading as="h2" size="lg" mb={8}>Tus Productos Favoritos</Heading>
         {favoriteProducts.length > 0 ? (
@@ -93,15 +95,13 @@ export const getServerSideProps: GetServerSideProps<ProfilePageProps> = async (c
       throw new Error('Token inválido o expirado, no se pudo obtener el perfil.');
     }
 
-    // 2. Procesamos la respuesta anidada de la API
     const apiResponse: ProfileApiResponse = await profileResponse.json();
-    const userData = apiResponse.data; // Extraemos el objeto de usuario
+    const userData = apiResponse.data; 
 
     if (!userData) {
         throw new Error('La respuesta de la API no contiene datos del usuario.');
     }
 
-    // Usamos 'correo' para obtener los favoritos
     const favoriteProductIds = getFavorites(userData.correo);
     const favoriteProductsData = await client.pageProductCollection({
       where: { productId_in: favoriteProductIds.map(Number) },
@@ -118,7 +118,6 @@ export const getServerSideProps: GetServerSideProps<ProfilePageProps> = async (c
 
   } catch (error) {
     console.error("Error en getServerSideProps de perfil:", error);
-    // Si algo falla (token inválido, API caída, etc.), destruimos la cookie y redirigimos
     nookies.destroy(ctx, 'token', { path: '/' });
     return { redirect: { destination: '/login', permanent: false } };
   }
