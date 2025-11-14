@@ -8,6 +8,8 @@ interface ProductoFavorito {
   precio: number;
 }
 
+const backendUrl = 'https://mileria-backend.vercel.app';
+
 const handleUnauthorized = (response: Response) => {
   if (response.status === 401 && typeof window !== 'undefined') {
     // Borra el token posiblemente inválido
@@ -28,7 +30,7 @@ export const getFavorites = async (userId: string): Promise<any[]> => {
   const token = Cookies.get('token');
   if (!token) return Promise.resolve([]); // Si no hay token, no hay favoritos
 
-  const response = await fetch(`/api/users/${userId}/favoritos`, {
+  const response = await fetch(`${backendUrl}/api/users/${userId}/favoritos`, {
     headers: {
       'Authorization': `Bearer ${token}`,
     },
@@ -56,7 +58,7 @@ export const addFavorite = async (userId: string, product: ProductoFavorito): Pr
   const token = Cookies.get('token');
   if (!token) throw new Error('Usuario no autenticado');
 
-  const response = await fetch(`/api/users/${userId}/favoritos`, {
+  const response = await fetch(`${backendUrl}/api/users/${userId}/favoritos`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -87,7 +89,7 @@ export const removeFavorite = async (userId: string, productId: string): Promise
   const token = Cookies.get('token');
   if (!token) throw new Error('Usuario no autenticado');
 
-  const response = await fetch(`/api/users/${userId}/favoritos/${productId}`, {
+  const response = await fetch(`${backendUrl}/api/users/${userId}/favoritos/${productId}`, {
     method: 'DELETE',
     headers: {
       'Authorization': `Bearer ${token}`,
