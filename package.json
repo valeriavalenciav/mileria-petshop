@@ -7,26 +7,13 @@
     "npm": "Please use Yarn"
   },
   "scripts": {
-    "generate-theme-typings": "yarn chakra-cli tokens ./src/theme/theme.ts",
-    "predev": "yarn generate-theme-typings",
-    "prebuild": "yarn generate-theme-typings",
-    "prepare": "husky",
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint",
     "type-check": "tsc --noEmit",
     "graphql-codegen:generate": "graphql-codegen -r dotenv/config --config codegen.ts",
     "graphql-codegen:watch": "graphql-codegen --watch -r dotenv/config --config codegen.ts",
     "setup": "./bin/setup.sh"
-  },
-  "lint-staged": {
-    "src/**/*.{js,jsx,ts,tsx}": [
-      "eslint --quiet --fix"
-    ],
-    "src/**/*.{json,js,ts,jsx,tsx}": [
-      "prettier --write"
-    ]
   },
   "license": "MIT",
   "dependencies": {
@@ -63,34 +50,5 @@
     "stripe": "^19.3.0",
     "swr": "^2.3.6",
     "urijs": "1.19.11"
-  },
-  "devDependencies": {
-    "@babel/eslint-parser": "7.28.4",
-    "@chakra-ui/cli": "2.1.8",
-    "@graphql-codegen/cli": "2.13.12",
-    "@graphql-codegen/client-preset": "1.1.4",
-    "@graphql-codegen/introspection": "2.2.1",
-    "@types/js-cookie": "^3.0.6",
-    "@types/minimatch": "^5.1.2",
-    "@types/node": "22.18.8",
-    "@types/react": "18.0.25",
-    "@types/react-dom": "18.0.9",
-    "@typescript-eslint/eslint-plugin": "8.46.0",
-    "@typescript-eslint/parser": "8.46.0",
-    "eslint": "8.57.1",
-    "eslint-config-next": "13.5.11",
-    "eslint-config-prettier": "10.1.8",
-    "eslint-import-resolver-typescript": "4.4.4",
-    "eslint-plugin-import": "2.32.0",
-    "eslint-plugin-prettier": "5.5.4",
-    "eslint-plugin-react": "7.37.5",
-    "eslint-plugin-react-hooks": "4.6.0",
-    "husky": "9.1.7",
-    "i18next": "25.5.3",
-    "i18next-http-backend": "3.0.2",
-    "lint-staged": "16.2.3",
-    "prettier": "3.6.2",
-    "typescript": "^5.9.3",
-    "typescript-graphql-request": "4.4.6"
   }
 }
