@@ -44,8 +44,9 @@ export const getFavorites = async (userId: string): Promise<any[]> => {
     throw new Error('No se pudieron obtener los favoritos.');
   }
 
-  const data = await response.json();
-  return data.favoritos || []; // El backend devuelve un objeto { success: true, favoritos: [...] }
+  const apiResponse = await response.json();
+  // CORRECTED: The backend returns the list in the 'data' property
+  return apiResponse.data || []; 
 };
 
 /**

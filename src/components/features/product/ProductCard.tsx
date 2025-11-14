@@ -23,8 +23,8 @@ export const ProductCard = ({ product }: ProductCardProps) => {
   const { favorites, mutateFavorites } = useFavorites();
   const router = useRouter();
 
-  // El producto es favorito si su ID está en la lista de favoritos del usuario
-  const isFavorited = !!productId && favorites.some(fav => fav.productoId === productId.toString());
+  // CORRECTED: The ID in the favorites list is '_id'
+  const isFavorited = !!productId && favorites.some(fav => fav._id === productId.toString());
 
   const handleFavoriteClick = async (e: React.MouseEvent<HTMLDivElement>) => {
     e.stopPropagation();
@@ -35,34 +35,42 @@ export const ProductCard = ({ product }: ProductCardProps) => {
       return;
     }
 
-    if (!productId || !name || !price) {
+    // The ID from Contentful is in 'productId'
+    const contentfulProductId = productId;
+
+    if (!contentfulProductId || !name || !price) {
       console.error('Datos del producto incompletos para agregar a favoritos.');
       return;
     }
 
+    // The data sent to the backend MUST match its expected structure
     const favoriteProductData = {
-      productoId: productId.toString(),
+      productoId: contentfulProductId.toString(),
       nombre: name,
       precio: price,
     };
 
+    // The ID for removal is the Contentful Product ID
+    const removalId = contentfulProductId.toString();
+
     try {
       if (isFavorited) {
-        // Actualización optimista: eliminar de la UI inmediatamente
-        const updatedFavorites = favorites.filter(fav => fav.productoId !== productId.toString());
+        const updatedFavorites = favorites.filter(fav => fav._id !== removalId);
         mutateFavorites(updatedFavorites, false);
-        await removeFavorite(user._id, productId.toString());
+        await removeFavorite(user._id, removalId);
       } else {
-        // Actualización optimista: agregar a la UI inmediatamente
-        const updatedFavorites = [...favorites, favoriteProductData];
+        const newFavorite = { 
+          ...favoriteProductData, 
+          _id: removalId // Simulate the backend response for optimistic update
+        };
+        const updatedFavorites = [...favorites, newFavorite];
         mutateFavorites(updatedFavorites, false);
         await addFavorite(user._id, favoriteProductData);
       }
-      // Revalidar los datos para obtener el estado más reciente del servidor
+      // Revalidate to sync with the server's definitive state
       mutateFavorites();
     } catch (error) {
       console.error('Failed to update favorite status:', error);
-      // Si hay un error, revierte la mutación para reflejar el estado real del servidor
       mutateFavorites(); 
     }
   };

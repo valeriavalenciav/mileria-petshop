@@ -15,7 +15,7 @@ const favoritesFetcher = async ([key, userId]: [string, string]) => {
 
 export const useFavorites = () => {
   const { user } = useUser();
-  const userId = user?.id;
+  const userId = user?._id; // <-- THE FIX
 
   // Usamos el userId en la clave de SWR. 
   // Si userId es nulo, SWR no ejecutará el fetcher.
