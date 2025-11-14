@@ -13,9 +13,9 @@ import {
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
 import { useRouter } from 'next/router';
-import nookies from 'nookies';
+import Cookies from 'js-cookie';
 
-import { register } from '@src/lib/auth';
+import { register, login } from '@src/lib/auth';
 
 const schema = z.object({
   nombre: z.string().min(1, 'El nombre es requerido'),
@@ -39,10 +39,11 @@ export const RegisterForm = () => {
 
   const onSubmit = async (data: RegisterFormData) => {
     try {
+      // 1. First, try to register the user normally
       const response = await register(data);
 
       if (response.token) {
-        nookies.set(null, 'token', response.token, { path: '/' });
+        Cookies.set('token', response.token, { path: '/', expires: 7 });
         toast({
           title: '¡Registro exitoso!',
           description: 'Hemos creado tu cuenta y te hemos redirigido a tu perfil.',
@@ -52,16 +53,36 @@ export const RegisterForm = () => {
         });
         router.push('/profile');
       } else {
-        throw new Error('Respuesta inesperada del servidor.');
+        throw new Error('Respuesta inesperada del servidor durante el registro.');
       }
-    } catch (error: any) {
-      toast({
-        title: 'Error en el registro',
-        description: error.message || 'Ocurrió un problema al intentar crear tu cuenta.',
-        status: 'error',
-        duration: 9000,
-        isClosable: true,
-      });
+    } catch (registerError: any) {
+      // 2. If registration fails (e.g., email exists), try to log in to handle reactivation
+      try {
+        const loginResponse = await login({ email: data.correo, password: data.password });
+
+        if (loginResponse.token) {
+          Cookies.set('token', loginResponse.token, { path: '/', expires: 7 });
+          toast({
+            title: '¡Bienvenido de nuevo!',
+            description: 'Hemos reactivado tu cuenta. Nos alegra tenerte de vuelta.',
+            status: 'success',
+            duration: 7000,
+            isClosable: true,
+          });
+          router.push('/profile');
+        } else {
+           throw new Error('Respuesta inesperada del servidor durante el login.');
+        }
+      } catch (loginError: any) {
+        // 3. If both register and login fail, show a definitive error
+        toast({
+          title: 'Error en el registro',
+          description: 'Este correo ya está en uso o los datos son incorrectos. Por favor, intenta iniciar sesión.',
+          status: 'error',
+          duration: 9000,
+          isClosable: true,
+        });
+      }
     }
   };
 

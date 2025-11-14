@@ -1,3 +1,4 @@
+
 import {
   Avatar, Container, Heading, Flex, VStack, Text, SimpleGrid, Box, Divider,
   AlertDialog, AlertDialogBody, AlertDialogFooter, AlertDialogHeader,
@@ -16,12 +17,11 @@ import { client } from '@src/lib/client';
 import { getFavorites } from '@src/lib/favorites';
 import { LogoutButton } from '@src/components/features/auth/LogoutButton';
 
-// ... (interfaces remain the same)
 interface UserProfile {
   id: string;
   nombre: string;
   correo: string;
-  direccion:string;
+  direccion: string;
   rol: string;
 }
 
@@ -35,17 +35,16 @@ interface ProfilePageProps {
   favoriteProducts: (PageProductFieldsFragment | null)[];
 }
 
+
 const ProfilePage: NextPage<ProfilePageProps> = ({ user, favoriteProducts }) => {
   const photoURL = `https://api.dicebear.com/9.x/adventurer-neutral/svg?seed=${user.nombre}&backgroundColor=b6e3f4,c0aede,d1d4f9,ffdfbf,ffd5dc`;
 
-  // Hooks for the delete account functionality
   const { isOpen, onOpen, onClose } = useDisclosure();
   const cancelRef = useRef(null);
   const router = useRouter();
   const toast = useToast();
   const [isLoading, setIsLoading] = useState(false);
 
-  // Function to handle the account deletion
   const handleDeleteAccount = async () => {
     setIsLoading(true);
     const token = Cookies.get('token');
@@ -67,9 +66,7 @@ const ProfilePage: NextPage<ProfilePageProps> = ({ user, favoriteProducts }) => 
     try {
       const response = await fetch('https://mileria-backend.vercel.app/api/users/delete/me', {
         method: 'DELETE',
-        headers: {
-          'Authorization': `Bearer ${token}`,
-        },
+        headers: { 'Authorization': `Bearer ${token}` },
       });
 
       if (!response.ok) {
@@ -77,24 +74,22 @@ const ProfilePage: NextPage<ProfilePageProps> = ({ user, favoriteProducts }) => 
         throw new Error(errorData.message || 'Ocurrió un error inesperado.');
       }
       
-      // Log out user on success
       Cookies.remove('token', { path: '/' });
       localStorage.removeItem('token');
       
       toast({
-        title: "Cuenta eliminada",
-        description: "Tu cuenta ha sido eliminada permanentemente.",
-        status: "success",
-        duration: 6000,
+        title: "Cuenta desactivada",
+        description: "Tu cuenta ha sido desactivada. Puedes reactivarla en los próximos 30 días simplemente iniciando sesión.",
+        status: "info",
+        duration: 9000,
         isClosable: true,
       });
 
-      // Redirect to login page after a short delay
       setTimeout(() => router.push('/login'), 1000);
 
     } catch (error: any) {
       toast({
-        title: "Error al eliminar la cuenta",
+        title: "Error al desactivar la cuenta",
         description: error.message,
         status: "error",
         duration: 9000,
@@ -153,7 +148,7 @@ const ProfilePage: NextPage<ProfilePageProps> = ({ user, favoriteProducts }) => 
         {favoriteProducts.length > 0 ? (
             <SimpleGrid columns={{ base: 1, md: 2, lg: 3 }} spacing={10}>
                 {favoriteProducts.map(
-                    product => product && <ProductCard key={product.sys.id} product={product} />
+                    product => product && <ProductCard key={product.sys.id} product={product} />,
                 )}
             </SimpleGrid>
         ) : (
@@ -161,7 +156,6 @@ const ProfilePage: NextPage<ProfilePageProps> = ({ user, favoriteProducts }) => 
         )}
       </Box>
 
-      {/* Delete Account Confirmation Dialog */}
       <AlertDialog
         isOpen={isOpen}
         leastDestructiveRef={cancelRef}
@@ -171,12 +165,14 @@ const ProfilePage: NextPage<ProfilePageProps> = ({ user, favoriteProducts }) => 
         <AlertDialogOverlay>
           <AlertDialogContent>
             <AlertDialogHeader fontSize="lg" fontWeight="bold">
-              Eliminar Cuenta Permanentemente
+              Desactivar tu Cuenta
             </AlertDialogHeader>
 
             <AlertDialogBody>
-              ¿Estás completamente seguro? Esta acción es irreversible. Todos tus datos, incluyendo
-              tu perfil y productos favoritos, serán eliminados para siempre.
+              ¿Estás seguro? Tu cuenta será desactivada. Si cambias de opinión, 
+              puedes reactivarla simplemente iniciando sesión o registrándote de nuevo 
+              en los próximos 30 días. Después de este período, tu cuenta será 
+              eliminada permanentemente.
             </AlertDialogBody>
 
             <AlertDialogFooter>
@@ -188,9 +184,9 @@ const ProfilePage: NextPage<ProfilePageProps> = ({ user, favoriteProducts }) => 
                 onClick={handleDeleteAccount}
                 ml={3}
                 isLoading={isLoading}
-                loadingText="Eliminando..."
+                loadingText="Desactivando..."
               >
-                Sí, Eliminar Mi Cuenta
+                Sí, Desactivar
               </Button>
             </AlertDialogFooter>
           </AlertDialogContent>
