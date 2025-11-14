@@ -51,12 +51,12 @@ export const ProductCard = ({ product }: ProductCardProps) => {
         // Actualización optimista: eliminar de la UI inmediatamente
         const updatedFavorites = favorites.filter(fav => fav.productoId !== productId.toString());
         mutateFavorites(updatedFavorites, false);
-        await removeFavorite(user.id, productId.toString());
+        await removeFavorite(user._id, productId.toString());
       } else {
         // Actualización optimista: agregar a la UI inmediatamente
         const updatedFavorites = [...favorites, favoriteProductData];
         mutateFavorites(updatedFavorites, false);
-        await addFavorite(user.id, favoriteProductData);
+        await addFavorite(user._id, favoriteProductData);
       }
       // Revalidar los datos para obtener el estado más reciente del servidor
       mutateFavorites();

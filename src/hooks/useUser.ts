@@ -31,7 +31,8 @@ const fetcher = async (url: string) => {
 };
 
 interface UserProfile {
-    id: string;
+    _id: string; // The real MongoDB ID
+    id: string; // This might be present but is not the DB identifier
     nombre: string;
     correo: string;
     direccion: string;
