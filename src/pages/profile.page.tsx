@@ -221,7 +221,7 @@ export const getServerSideProps: GetServerSideProps<ProfilePageProps> = async (c
         throw new Error('La respuesta de la API no contiene datos del usuario.');
     }
 
-    const favoriteProductIds = getFavorites(userData.correo);
+    const favoriteProductIds = await getFavorites(userData.correo);
     const favoriteProductsData = await client.pageProductCollection({
       where: { productId_in: favoriteProductIds.map(Number) },
       locale: ctx.locale,

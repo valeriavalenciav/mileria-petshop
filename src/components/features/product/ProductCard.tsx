@@ -24,7 +24,7 @@ export const ProductCard = ({ product }: ProductCardProps) => {
   const router = useRouter();
 
   // El producto es favorito si su ID está en la lista de favoritos del usuario
-  const isFavorited = !!productId && favorites.some(fav => fav.productoId === productId);
+  const isFavorited = !!productId && favorites.some(fav => fav.productoId === productId.toString());
 
   const handleFavoriteClick = async (e: React.MouseEvent<HTMLDivElement>) => {
     e.stopPropagation();
@@ -35,13 +35,13 @@ export const ProductCard = ({ product }: ProductCardProps) => {
       return;
     }
 
-    if (!productId || name === null || price === null) {
+    if (!productId || !name || !price) {
       console.error('Datos del producto incompletos para agregar a favoritos.');
       return;
     }
 
     const favoriteProductData = {
-      productoId,
+      productoId: productId.toString(),
       nombre: name,
       precio: price,
     };
@@ -49,9 +49,9 @@ export const ProductCard = ({ product }: ProductCardProps) => {
     try {
       if (isFavorited) {
         // Actualización optimista: eliminar de la UI inmediatamente
-        const updatedFavorites = favorites.filter(fav => fav.productoId !== productId);
+        const updatedFavorites = favorites.filter(fav => fav.productoId !== productId.toString());
         mutateFavorites(updatedFavorites, false);
-        await removeFavorite(user.id, productId);
+        await removeFavorite(user.id, productId.toString());
       } else {
         // Actualización optimista: agregar a la UI inmediatamente
         const updatedFavorites = [...favorites, favoriteProductData];
