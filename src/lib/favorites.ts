@@ -72,7 +72,8 @@ export const addFavorite = async (userId: string, product: ProductoFavorito): Pr
   }
 
   if (!response.ok) {
-    const errorData = await response.json();
+    const errorData = await response.json().catch(() => ({ message: 'El backend respondió con un error no-JSON.' }));
+    console.error('Error del backend al añadir favorito:', errorData);
     throw new Error(errorData.message || 'No se pudo agregar el favorito.');
   }
 
@@ -100,9 +101,9 @@ export const removeFavorite = async (userId: string, productId: string): Promise
     return; // No hacer nada más durante la redirección
   }
   
-  // Un status 204 (No Content) es una respuesta exitosa para DELETE
   if (!response.ok && response.status !== 204) {
-    const errorData = await response.json();
+    const errorData = await response.json().catch(() => ({ message: 'El backend respondió con un error no-JSON.' }));
+    console.error('Error del backend al eliminar favorito:', errorData);
     throw new Error(errorData.message || 'No se pudo eliminar el favorito.');
   }
 };
