@@ -17,8 +17,9 @@ import { client } from '@src/lib/client';
 import { getFavorites } from '@src/lib/favorites';
 import { LogoutButton } from '@src/components/features/auth/LogoutButton';
 
+// CORRECTED: The user object from the API has `_id`
 interface UserProfile {
-  id: string;
+  _id: string;
   nombre: string;
   correo: string;
   direccion: string;
@@ -34,7 +35,6 @@ interface ProfilePageProps {
   user: UserProfile;
   favoriteProducts: (PageProductFieldsFragment | null)[];
 }
-
 
 const ProfilePage: NextPage<ProfilePageProps> = ({ user, favoriteProducts }) => {
   const photoURL = `https://api.dicebear.com/9.x/adventurer-neutral/svg?seed=${user.nombre}&backgroundColor=b6e3f4,c0aede,d1d4f9,ffdfbf,ffd5dc`;
@@ -205,6 +205,7 @@ export const getServerSideProps: GetServerSideProps<ProfilePageProps> = async (c
   }
 
   try {
+    // Step 1: Fetch user profile data
     const profileResponse = await fetch('https://mileria-backend.vercel.app/api/auth/profile', {
       method: 'GET',
       headers: { 'Authorization': `Bearer ${token}` },
@@ -215,23 +216,37 @@ export const getServerSideProps: GetServerSideProps<ProfilePageProps> = async (c
     }
 
     const apiResponse: ProfileApiResponse = await profileResponse.json();
-    const userData = apiResponse.data; 
+    const userData = apiResponse.data;
 
-    if (!userData) {
-        throw new Error('La respuesta de la API no contiene datos del usuario.');
+    if (!userData || !userData._id) {
+        throw new Error('La respuesta de la API no contiene un ID de usuario válido.');
     }
 
-    const favoriteProductIds = await getFavorites(userData.correo);
-    const favoriteProductsData = await client.pageProductCollection({
-      where: { productId_in: favoriteProductIds.map(Number) },
-      locale: ctx.locale,
-    });
+    // Step 2: Fetch the list of favorite objects from our backend using the correct user _id
+    const favoritesList = await getFavorites(userData._id);
+
+    let favoriteProductsFromContentful: (PageProductFieldsFragment | null)[] = [];
+
+    // Step 3: If the user has favorites, fetch their full details from Contentful
+    if (favoritesList && favoritesList.length > 0) {
+      // Step 4: Extract the NAMES of the favorite products
+      const favoriteProductNames = favoritesList.map(fav => fav.nombre).filter((name): name is string => !!name);
+
+      if (favoriteProductNames.length > 0) {
+        // Step 5: Fetch all products from Contentful whose name is in our list of favorites
+        const contentfulResponse = await client.pageProductCollection({
+          where: { name_in: favoriteProductNames },
+          locale: ctx.locale,
+        });
+        favoriteProductsFromContentful = contentfulResponse.pageProductCollection?.items || [];
+      }
+    }
 
     return {
       props: {
         ...(await getServerSideTranslations(ctx.locale)),
         user: userData,
-        favoriteProducts: favoriteProductsData.pageProductCollection?.items || [],
+        favoriteProducts: favoriteProductsFromContentful,
       },
     };
 

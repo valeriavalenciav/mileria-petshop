@@ -23,8 +23,9 @@ export const ProductCard = ({ product }: ProductCardProps) => {
   const { favorites, mutateFavorites } = useFavorites();
   const router = useRouter();
 
-  // CORRECTED: The ID in the favorites list is '_id'
-  const isFavorited = !!productId && favorites.some(fav => fav._id === productId.toString());
+  // FINAL FIX: Check for favorite status using the product NAME, as it's the only
+  // common identifier between the product page and the favorites list from the backend.
+  const isFavorited = !!name && favorites.some(fav => fav.nombre === name);
 
   const handleFavoriteClick = async (e: React.MouseEvent<HTMLDivElement>) => {
     e.stopPropagation();
@@ -35,42 +36,51 @@ export const ProductCard = ({ product }: ProductCardProps) => {
       return;
     }
 
-    // The ID from Contentful is in 'productId'
     const contentfulProductId = productId;
 
     if (!contentfulProductId || !name || !price) {
-      console.error('Datos del producto incompletos para agregar a favoritos.');
+      console.error('Incomplete product data to update favorites.');
       return;
     }
 
-    // The data sent to the backend MUST match its expected structure
-    const favoriteProductData = {
-      productoId: contentfulProductId.toString(),
-      nombre: name,
-      precio: price,
-    };
-
-    // The ID for removal is the Contentful Product ID
-    const removalId = contentfulProductId.toString();
-
     try {
       if (isFavorited) {
-        const updatedFavorites = favorites.filter(fav => fav._id !== removalId);
+        // Logic to REMOVE a favorite
+        // The API requires the Contentful Product ID for removal.
+        const removalProductId = contentfulProductId.toString();
+
+        // Optimistic update: remove the item from the UI by filtering by name.
+        const updatedFavorites = favorites.filter(fav => fav.nombre !== name);
         mutateFavorites(updatedFavorites, false);
-        await removeFavorite(user._id, removalId);
+
+        // Call the API with the correct user ID and product ID.
+        await removeFavorite(user._id, removalProductId);
+
       } else {
-        const newFavorite = { 
-          ...favoriteProductData, 
-          _id: removalId // Simulate the backend response for optimistic update
+        // Logic to ADD a favorite
+        const favoriteProductData = {
+          productoId: contentfulProductId.toString(),
+          nombre: name,
+          precio: price,
         };
-        const updatedFavorites = [...favorites, newFavorite];
+
+        // Optimistic update: add the item to the UI.
+        // We add a temporary `nombre` to make the UI consistent.
+        const newOptimisticFavorite = { ...favoriteProductData, nombre: name };
+        const updatedFavorites = [...favorites, newOptimisticFavorite];
         mutateFavorites(updatedFavorites, false);
+
+        // Call the API.
         await addFavorite(user._id, favoriteProductData);
       }
-      // Revalidate to sync with the server's definitive state
+
+      // Trigger a revalidation to sync with the server's final state.
+      // This will fix the flicker.
       mutateFavorites();
+
     } catch (error) {
       console.error('Failed to update favorite status:', error);
+      // If an error occurs, revert the optimistic update by re-fetching.
       mutateFavorites(); 
     }
   };
