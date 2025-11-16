@@ -10,21 +10,20 @@ import { HeartOutlineIcon } from '@src/components/shared/icons/HeartOutlineIcon'
 import { useFavorites } from '@src/hooks/useFavorites';
 import { useUser } from '@src/hooks/useUser';
 import { PageProductFieldsFragment } from '@src/lib/__generated/sdk';
-import { addFavorite, removeFavorite } from '@src/lib/favorites';
 
 interface ProductCardProps {
   product: PageProductFieldsFragment;
 }
 
 export const ProductCard = ({ product }: ProductCardProps) => {
-  const { name, price, featuredProductImage, slug, productId } = product;
-
+  const { name, price, featuredProductImage, slug } = product;
   const { user } = useUser();
-  const { favorites, mutateFavorites } = useFavorites();
   const router = useRouter();
 
-  // FINAL FIX: Check for favorite status using the product NAME, as it's the only
-  // common identifier between the product page and the favorites list from the backend.
+  // Obtenemos las funciones y el estado directamente del hook.
+  const { favorites, addFavorite, removeFavorite } = useFavorites();
+
+  // La lógica para determinar si es un favorito sigue siendo la misma y es correcta.
   const isFavorited = !!name && favorites.some(fav => fav.nombre === name);
 
   const handleFavoriteClick = async (e: React.MouseEvent<HTMLDivElement>) => {
@@ -36,52 +35,21 @@ export const ProductCard = ({ product }: ProductCardProps) => {
       return;
     }
 
-    const contentfulProductId = productId;
-
-    if (!contentfulProductId || !name || !price) {
-      console.error('Incomplete product data to update favorites.');
+    if (!name) {
+      console.error('El producto no tiene un nombre para ser añadido/eliminado de favoritos.');
       return;
     }
 
     try {
       if (isFavorited) {
-        // Logic to REMOVE a favorite
-        // The API requires the Contentful Product ID for removal.
-        const removalProductId = contentfulProductId.toString();
-
-        // Optimistic update: remove the item from the UI by filtering by name.
-        const updatedFavorites = favorites.filter(fav => fav.nombre !== name);
-        mutateFavorites(updatedFavorites, false);
-
-        // Call the API with the correct user ID and product ID.
-        await removeFavorite(user._id, removalProductId);
-
+        // Si ya es un favorito, simplemente llamamos a la función `removeFavorite` del hook.
+        await removeFavorite(name);
       } else {
-        // Logic to ADD a favorite
-        const favoriteProductData = {
-          productoId: contentfulProductId.toString(),
-          nombre: name,
-          precio: price,
-        };
-
-        // Optimistic update: add the item to the UI.
-        // We add a temporary `nombre` to make the UI consistent.
-        const newOptimisticFavorite = { ...favoriteProductData, nombre: name };
-        const updatedFavorites = [...favorites, newOptimisticFavorite];
-        mutateFavorites(updatedFavorites, false);
-
-        // Call the API.
-        await addFavorite(user._id, favoriteProductData);
+        // Si no es un favorito, pasamos el objeto de producto completo a `addFavorite`.
+        await addFavorite(product);
       }
-
-      // Trigger a revalidation to sync with the server's final state.
-      // This will fix the flicker.
-      mutateFavorites();
-
     } catch (error) {
-      console.error('Failed to update favorite status:', error);
-      // If an error occurs, revert the optimistic update by re-fetching.
-      mutateFavorites(); 
+      console.error('Error al actualizar el estado de favorito:', error);
     }
   };
 

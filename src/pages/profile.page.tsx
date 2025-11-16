@@ -17,7 +17,6 @@ import { client } from '@src/lib/client';
 import { getFavorites } from '@src/lib/favorites';
 import { LogoutButton } from '@src/components/features/auth/LogoutButton';
 
-// CORRECTED: The user object from the API has `_id`
 interface UserProfile {
   _id: string;
   nombre: string;
@@ -197,51 +196,57 @@ const ProfilePage: NextPage<ProfilePageProps> = ({ user, favoriteProducts }) => 
 };
 
 export const getServerSideProps: GetServerSideProps<ProfilePageProps> = async (ctx) => {
+  // Primero, obtenemos el token desde las cookies en el servidor.
   const cookies = nookies.get(ctx);
   const token = cookies.token;
 
+  // Si no hay token, el usuario no está autenticado, lo redirigimos al login.
   if (!token) {
     return { redirect: { destination: '/login', permanent: false } };
   }
 
   try {
-    // Step 1: Fetch user profile data
+    // 1. Obtener el perfil del usuario desde nuestro backend.
     const profileResponse = await fetch('https://mileria-backend.vercel.app/api/auth/profile', {
       method: 'GET',
       headers: { 'Authorization': `Bearer ${token}` },
     });
 
     if (!profileResponse.ok) {
-      throw new Error('Token inválido o expirado, no se pudo obtener el perfil.');
+      // Si el token es inválido o expiró, limpiamos la cookie y redirigimos.
+      nookies.destroy(ctx, 'token', { path: '/' });
+      return { redirect: { destination: '/login', permanent: false } };
     }
 
     const apiResponse: ProfileApiResponse = await profileResponse.json();
     const userData = apiResponse.data;
 
     if (!userData || !userData._id) {
-        throw new Error('La respuesta de la API no contiene un ID de usuario válido.');
+      throw new Error('La respuesta de la API no contiene un ID de usuario válido.');
     }
 
-    // Step 2: Fetch the list of favorite objects from our backend using the correct user _id
-    const favoritesList = await getFavorites(userData._id);
+    // 2. Usar el _id del usuario para obtener la lista de favoritos desde nuestro backend.
+    // ¡Aquí está la corrección clave! Pasamos `ctx` a `getFavorites`.
+    const favoritesFromBackend = await getFavorites(userData._id, ctx);
 
     let favoriteProductsFromContentful: (PageProductFieldsFragment | null)[] = [];
 
-    // Step 3: If the user has favorites, fetch their full details from Contentful
-    if (favoritesList && favoritesList.length > 0) {
-      // Step 4: Extract the NAMES of the favorite products
-      const favoriteProductNames = favoritesList.map(fav => fav.nombre).filter((name): name is string => !!name);
-
+    // 3. Si la lista de favoritos del backend no está vacía, procedemos.
+    if (favoritesFromBackend && favoritesFromBackend.length > 0) {
+      // 4. Extraer solo los NOMBRES de los productos favoritos.
+      const favoriteProductNames = favoritesFromBackend.map(fav => fav.nombre).filter((name): name is string => !!name);
+      
+      // 5. Usar los nombres para consultar Contentful y obtener los detalles completos.
       if (favoriteProductNames.length > 0) {
-        // Step 5: Fetch all products from Contentful whose name is in our list of favorites
         const contentfulResponse = await client.pageProductCollection({
-          where: { name_in: favoriteProductNames },
+          where: { name_in: favoriteProductNames }, // Usar el filtro `name_in`
           locale: ctx.locale,
         });
         favoriteProductsFromContentful = contentfulResponse.pageProductCollection?.items || [];
       }
     }
 
+    // 6. Pasar los datos del usuario y la lista de productos de Contentful a la página.
     return {
       props: {
         ...(await getServerSideTranslations(ctx.locale)),
@@ -252,6 +257,7 @@ export const getServerSideProps: GetServerSideProps<ProfilePageProps> = async (c
 
   } catch (error) {
     console.error("Error en getServerSideProps de perfil:", error);
+    // Si algo sale mal, es más seguro desloguear al usuario y enviarlo a login.
     nookies.destroy(ctx, 'token', { path: '/' });
     return { redirect: { destination: '/login', permanent: false } };
   }
