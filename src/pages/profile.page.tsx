@@ -145,7 +145,7 @@ const ProfilePage: NextPage<ProfilePageProps> = ({ user, favoriteProducts }) => 
       <Box mt={12}>
         <Heading as="h2" size="lg" mb={8}>Tus Productos Favoritos</Heading>
         {favoriteProducts.length > 0 ? (
-            <SimpleGrid columns={{ base: 1, md: 2, lg: 3 }} spacing={10}>
+            <SimpleGrid columns={{ base: 2, md: 4, lg: 7 }} spacing={4}>
                 {favoriteProducts.map(
                     product => product && <ProductCard key={product.sys.id} product={product} />,
                 )}
